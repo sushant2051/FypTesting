@@ -1,0 +1,13 @@
+interface ButtonProps {
+  label: string;
+  onClick: () => void;
+}
+const Button: React.FC<ButtonProps> = ({ label, onClick }) => {
+  return (
+    <button onClick={onClick} className="cursor-pointer">
+      {label}
+    </button>
+  );
+};
+
+export { Button };
