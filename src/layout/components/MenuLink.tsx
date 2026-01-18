@@ -22,8 +22,8 @@ const MenuLink: React.FC<MenuLinkProps> = ({
     <div>
       <div
         className={`
-          hover:bg-neutral-20 flex cursor-pointer items-center rounded-md p-1",
-          ${isActive && "bg-neutral-200"}`}
+          hover:bg-gray-800 flex cursor-pointer items-center rounded-md p-1",
+          ${isActive && "bg-gray-700"}`}
       >
         <NavLink
           to={route!}
