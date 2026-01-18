@@ -15,7 +15,33 @@ const mockContacts = [
 
 const reminderTypes = ["Birthday", "Meeting", "Anniversary", "Other"];
 
+type ReminderRow = ReminderType & { id: number };
+
 const Reminder = () => {
+  const [showForm, setShowForm] = useState(false);
+  const [editingReminder, setEditingReminder] = useState<ReminderRow | null>(
+    null,
+  );
+
+  const [reminders, setReminders] = useState<ReminderRow[]>([
+    {
+      id: 1,
+      contactId: 1,
+      title: "Birthday reminder",
+      date: "2026-05-10",
+      time: "10:00",
+      type: "Birthday",
+    },
+    {
+      id: 2,
+      contactId: 2,
+      title: "Project meeting",
+      date: "2026-05-20",
+      time: "14:30",
+      type: "Meeting",
+    },
+  ]);
+
   const [formData, setFormData] = useState<ReminderType>({
     contactId: 0,
     title: "",
@@ -37,17 +63,38 @@ const Reminder = () => {
     setErrors((prev) => ({ ...prev, [name]: [] }));
   };
 
+  const handleAdd = () => {
+    setFormData({ contactId: 0, title: "", date: "", time: "", type: "" });
+    setEditingReminder(null);
+    setShowForm(true);
+  };
+
+  const handleEdit = (reminder: ReminderRow) => {
+    const { ...rest } = reminder;
+    setFormData(rest);
+    setEditingReminder(reminder);
+    setShowForm(true);
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
       const data = ReminderSchema.parse(formData);
       setErrors({});
-      console.log("Reminder Data:", data);
-      alert(
-        `Reminder for ${mockContacts.find((c) => c.id === data.contactId)?.name} added!`,
-      );
-      setFormData({ contactId: 0, title: "", date: "", time: "", type: "" });
+
+      if (editingReminder) {
+        setReminders((prev) =>
+          prev.map((r) =>
+            r.id === editingReminder.id ? { ...r, ...data } : r,
+          ),
+        );
+      } else {
+        setReminders((prev) => [...prev, { id: prev.length + 1, ...data }]);
+      }
+
+      setShowForm(false);
+      setEditingReminder(null);
     } catch (err) {
       if (err instanceof z.ZodError) {
         const fieldErrors: Record<string, string[]> = {};
@@ -61,78 +108,108 @@ const Reminder = () => {
     }
   };
 
-  const handleReset = () => {
-    setFormData({
-      contactId: 0,
-      title: "",
-      date: "",
-      time: "",
-      type: "",
-    });
-    setErrors({});
+  const handleDelete = (id: number) => {
+    setReminders((prev) => prev.filter((r) => r.id !== id));
   };
 
+  const getContactName = (id: number) =>
+    mockContacts.find((c) => c.id === id)?.name || "-";
+
   return (
-    <div className="p-6 w-full">
-      <form
-        className="flex flex-col gap-4 border border-gray-200 rounded-md p-4"
-        onSubmit={handleSubmit}
-      >
-        <div className="flex flex-col gap-1">
-          <label className="text-sm">Select Contact</label>
+    <div className="p-6 w-full flex flex-col gap-4">
+      {!showForm ? (
+        <>
+          <Button label="Add Reminder" onClick={handleAdd} />
+
+          <div className="border border-gray-200 rounded-md overflow-hidden">
+            <div className="flex px-4 py-2 bg-gray-100 font-bold">
+              <span className="w-1/5">Contact</span>
+              <span className="w-1/5">Reminder</span>
+              <span className="w-1/5">Date</span>
+              <span className="w-1/5">Time</span>
+              <span className="w-1/5 text-center">Actions</span>
+            </div>
+
+            {reminders.map((reminder) => (
+              <div key={reminder.id}>
+                <div className="flex px-4 py-2">
+                  <span className="w-1/5">
+                    {getContactName(reminder.contactId)}
+                  </span>
+                  <span className="w-1/5">{reminder.title}</span>
+                  <span className="w-1/5">{reminder.date}</span>
+                  <span className="w-1/5">{reminder.time}</span>
+                  <span className="w-1/5 text-center flex items-center gap-2 justify-center">
+                    <Button label="Edit" onClick={() => handleEdit(reminder)} />
+                    <Button
+                      variant="secondary"
+                      label="Delete"
+                      onClick={() => handleDelete(reminder.id)}
+                    />
+                  </span>
+                </div>
+                <hr className="mx-4 border-gray-300" />
+              </div>
+            ))}
+          </div>
+        </>
+      ) : (
+        <form
+          className="flex flex-col gap-4 border border-gray-200 rounded-md p-4"
+          onSubmit={handleSubmit}
+        >
+          <h2 className="font-bold text-lg">
+            {editingReminder ? "Edit Reminder" : "Add Reminder"}
+          </h2>
+
           <select
             name="contactId"
             value={formData.contactId}
             onChange={handleChange}
-            className="border p-2 rounded w-full"
+            className="border p-2 rounded"
           >
             <option value={0}>Select Contact</option>
-            {mockContacts.map((contact) => (
-              <option key={contact.id} value={contact.id}>
-                {contact.name}
+            {mockContacts.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name}
               </option>
             ))}
           </select>
           {errors.contactId && (
-            <p className="text-red-500 text-sm">{errors.contactId[0]}</p>
+            <p className="text-red-500">{errors.contactId[0]}</p>
           )}
-        </div>
 
-        <InputField
-          label="Reminder Title"
-          type="text"
-          name="title"
-          placeholder="Enter reminder title"
-          value={formData.title}
-          onChange={handleChange}
-          className="border p-2 rounded w-full"
-          errors={errors.name}
-        />
-        <InputField
-          label="Date"
-          type="date"
-          name="date"
-          value={formData.date}
-          onChange={handleChange}
-          className="border p-2 rounded w-full"
-          errors={errors.name}
-        />
-        <InputField
-          label="Time"
-          type="time"
-          name="time"
-          value={formData.time}
-          onChange={handleChange}
-          className="border p-2 rounded w-full"
-          errors={errors.time}
-        />
-        <div className="flex flex-col gap-1">
-          <label className="test-sm">Reminder Type</label>
+          <InputField
+            label="Reminder Title"
+            name="title"
+            value={formData.title}
+            onChange={handleChange}
+            errors={errors.title}
+          />
+
+          <InputField
+            label="Date"
+            type="date"
+            name="date"
+            value={formData.date}
+            onChange={handleChange}
+            errors={errors.date}
+          />
+
+          <InputField
+            label="Time"
+            type="time"
+            name="time"
+            value={formData.time}
+            onChange={handleChange}
+            errors={errors.time}
+          />
+
           <select
             name="type"
             value={formData.type}
             onChange={handleChange}
-            className="border p-2 rounded w-full"
+            className="border p-2 rounded"
           >
             <option value="">Select type</option>
             {reminderTypes.map((type) => (
@@ -141,18 +218,19 @@ const Reminder = () => {
               </option>
             ))}
           </select>
-          {errors.type && (
-            <p className="text-red-500 text-sm">{errors.type[0]}</p>
-          )}
-        </div>
-        <Button type="submit" label="Save" />
-        <Button
-          type="reset"
-          onClick={handleReset}
-          label="Cancel"
-          variant="outline"
-        />
-      </form>
+          {errors.type && <p className="text-red-500">{errors.type[0]}</p>}
+
+          <div className="flex gap-2">
+            <Button type="submit" label="Save" />
+            <Button
+              type="button"
+              label="Cancel"
+              variant="outline"
+              onClick={() => setShowForm(false)}
+            />
+          </div>
+        </form>
+      )}
     </div>
   );
 };
