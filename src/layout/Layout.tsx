@@ -3,11 +3,11 @@ import Sidebar from "./Sidebar";
 
 const Layout: React.FC = () => {
   return (
-    <div className="relative min-h-screen max-w-[100vw] bg-white md:flex">
+    <div className="relative min-h-screen max-w-[100vw]  md:flex">
       <div className="relative md:fixed md:max-w-50 lg:max-w-[256px]">
         <Sidebar />
       </div>
-      <main className="w-full md:pl-50 lg:pl-64">
+      <main className="w-full md:pl-50 lg:pl-64 bg-white">
         <Outlet />
       </main>
     </div>

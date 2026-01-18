@@ -7,7 +7,7 @@ const Logout = () => {
     console.log("user is log out");
     navigate("");
   };
-  return <Button label="Logout" onClick={handleLogout} />;
+  return <Button variant="secondary" label="Logout" onClick={handleLogout} />;
 };
 
 export default Logout;
