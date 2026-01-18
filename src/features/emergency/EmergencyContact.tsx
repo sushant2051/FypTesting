@@ -65,6 +65,14 @@ const EmergencyContact = () => {
     }
   };
 
+  const handleResetForm = () => {
+    setFormData({
+      name: "",
+      phone: "",
+    });
+    setShowForm(false);
+  };
+
   return (
     <div className="py-6 flex flex-col gap-4 sm:gap-6">
       <div>
@@ -92,12 +100,18 @@ const EmergencyContact = () => {
             label="Phone Number"
             type="text"
             name="phone"
-            placeholder="Number"
+            placeholder="Phone number"
             value={formData.phone}
             onChange={handleChange}
             errors={errors.phone}
           />
           <Button type="submit" label="Add Contact" />
+          <Button
+            onClick={handleResetForm}
+            variant="outline"
+            type="reset"
+            label="Cancel"
+          />
         </form>
       )}
 
