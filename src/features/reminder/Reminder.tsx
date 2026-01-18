@@ -61,29 +61,42 @@ const Reminder = () => {
     }
   };
 
+  const handleReset = () => {
+    setFormData({
+      contactId: 0,
+      title: "",
+      date: "",
+      time: "",
+      type: "",
+    });
+    setErrors({});
+  };
+
   return (
     <div className="p-6 w-full">
       <form
         className="flex flex-col gap-4 border border-gray-200 rounded-md p-4"
         onSubmit={handleSubmit}
       >
-        <label className="font-medium">Select Contact</label>
-        <select
-          name="contactId"
-          value={formData.contactId}
-          onChange={handleChange}
-          className="border p-2 rounded w-full"
-        >
-          <option value={0}>Select Contact</option>
-          {mockContacts.map((contact) => (
-            <option key={contact.id} value={contact.id}>
-              {contact.name}
-            </option>
-          ))}
-        </select>
-        {errors.contactId && (
-          <p className="text-red-500 text-sm">{errors.contactId[0]}</p>
-        )}
+        <div className="flex flex-col gap-1">
+          <label className="text-sm">Select Contact</label>
+          <select
+            name="contactId"
+            value={formData.contactId}
+            onChange={handleChange}
+            className="border p-2 rounded w-full"
+          >
+            <option value={0}>Select Contact</option>
+            {mockContacts.map((contact) => (
+              <option key={contact.id} value={contact.id}>
+                {contact.name}
+              </option>
+            ))}
+          </select>
+          {errors.contactId && (
+            <p className="text-red-500 text-sm">{errors.contactId[0]}</p>
+          )}
+        </div>
 
         <InputField
           label="Reminder Title"
@@ -95,17 +108,15 @@ const Reminder = () => {
           className="border p-2 rounded w-full"
           errors={errors.name}
         />
-        <div className="relative">
-          <InputField
-            label="Date"
-            type="date"
-            name="date"
-            value={formData.date}
-            onChange={handleChange}
-            className="border p-2 rounded w-full"
-            errors={errors.name}
-          />
-        </div>
+        <InputField
+          label="Date"
+          type="date"
+          name="date"
+          value={formData.date}
+          onChange={handleChange}
+          className="border p-2 rounded w-full"
+          errors={errors.name}
+        />
         <InputField
           label="Time"
           type="time"
@@ -115,24 +126,32 @@ const Reminder = () => {
           className="border p-2 rounded w-full"
           errors={errors.time}
         />
-        <label className="font-medium">Reminder Type</label>
-        <select
-          name="type"
-          value={formData.type}
-          onChange={handleChange}
-          className="border p-2 rounded w-full"
-        >
-          <option value="">Select type</option>
-          {reminderTypes.map((type) => (
-            <option key={type} value={type}>
-              {type}
-            </option>
-          ))}
-        </select>
-        {errors.type && (
-          <p className="text-red-500 text-sm">{errors.type[0]}</p>
-        )}
-        <Button type="submit" label="Add Reminder" />
+        <div className="flex flex-col gap-1">
+          <label className="test-sm">Reminder Type</label>
+          <select
+            name="type"
+            value={formData.type}
+            onChange={handleChange}
+            className="border p-2 rounded w-full"
+          >
+            <option value="">Select type</option>
+            {reminderTypes.map((type) => (
+              <option key={type} value={type}>
+                {type}
+              </option>
+            ))}
+          </select>
+          {errors.type && (
+            <p className="text-red-500 text-sm">{errors.type[0]}</p>
+          )}
+        </div>
+        <Button type="submit" label="Save" />
+        <Button
+          type="reset"
+          onClick={handleReset}
+          label="Cancel"
+          variant="outline"
+        />
       </form>
     </div>
   );

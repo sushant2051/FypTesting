@@ -78,23 +78,25 @@ const Notes = () => {
         className="flex flex-col gap-2 border border-gray-200 rounded-md p-4"
         onSubmit={handleSubmit}
       >
-        <label className="font-medium">Select Contact</label>
-        <select
-          name="contactId"
-          value={formData.contactId}
-          onChange={handleChange}
-          className="border p-2 rounded w-full"
-        >
-          <option value={0}>Select Contact</option>
-          {mockContacts.map((contact) => (
-            <option key={contact.id} value={contact.id}>
-              {contact.name}
-            </option>
-          ))}
-        </select>
-        {errors.contactId && (
-          <p className="text-red-500 text-sm">{errors.contactId[0]}</p>
-        )}
+        <div className="flex flex-col gap-1">
+          <label className="text-sm">Select Contact</label>
+          <select
+            name="contactId"
+            value={formData.contactId}
+            onChange={handleChange}
+            className="border p-2 rounded w-full"
+          >
+            <option value={0}>Select Contact</option>
+            {mockContacts.map((contact) => (
+              <option key={contact.id} value={contact.id}>
+                {contact.name}
+              </option>
+            ))}
+          </select>
+          {errors.contactId && (
+            <p className="text-red-500 text-sm">{errors.contactId[0]}</p>
+          )}
+        </div>
 
         <label className="font-medium mt-2">Description</label>
         <textarea
