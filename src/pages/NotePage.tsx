@@ -1,5 +1,11 @@
+import Notes from "../features/notes/Notes";
+
 const NotePage = () => {
-  return <div>NotePage</div>;
+  return (
+    <div>
+      <Notes />
+    </div>
+  );
 };
 
 export default NotePage;
