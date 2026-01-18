@@ -135,10 +135,11 @@ const Contact = () => {
     <div className="p-6 w-full flex flex-col gap-4">
       {!showForm ? (
         <>
+          <p className="text-xl font-bold py-4">Contacts</p>
           <div className="flex items-center gap-4 mb-4">
             <InputField
               type="text"
-              placeholder="Search contacts by name or phone..."
+              placeholder="Search contacts"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -167,8 +168,8 @@ const Contact = () => {
                       />
 
                       <Button
-                      variant='secondary'
-                        label='Delete'
+                        variant="secondary"
+                        label="Delete"
                         onClick={() => handleDelete(contact.id)}
                       />
                     </span>
@@ -190,7 +191,7 @@ const Contact = () => {
         >
           <button
             type="button"
-            className="flex items-center gap-2 mb-2"
+            className="flex items-center gap-2 mb-2 cursor-pointer"
             onClick={handleBack}
           >
             <IoArrowBack /> Go Back
