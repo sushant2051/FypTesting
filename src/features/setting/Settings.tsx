@@ -48,7 +48,7 @@ const Settings = () => {
     setIsPasswordChange(false);
   };
   return (
-    <div>
+    <div className="p-4">
       {!isPasswordChange ? (
         <div className="flex flex-col gap-2 py-6">
           <p className="text-xl">Settings</p>
@@ -65,8 +65,11 @@ const Settings = () => {
           </div>
         </div>
       ) : (
-        <div className="border border-gray-200 rounded-md p-4 w-100 my-8">
-          <button onClick={handleGoBack} className="flex items-center gap-2">
+        <div className="border border-gray-200 rounded-md p-4 my-8">
+          <button
+            onClick={handleGoBack}
+            className="flex items-center gap-2 cursor-pointer"
+          >
             <IoArrowBack />
             <p>Go back</p>
           </button>
