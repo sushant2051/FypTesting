@@ -119,7 +119,10 @@ const Reminder = () => {
     <div className="p-6 w-full flex flex-col gap-4">
       {!showForm ? (
         <>
-          <Button label="Add Reminder" onClick={handleAdd} />
+          <p className="text-xl font-bold py-4">Reminders</p>
+          <div>
+            <Button label="Add Reminder" onClick={handleAdd} />
+          </div>
 
           <div className="border border-gray-200 rounded-md overflow-hidden">
             <div className="flex px-4 py-2 bg-gray-100 font-bold">
