@@ -4,12 +4,12 @@ import MenuItems from "./MenuItems";
 const DesktopNav = () => {
   return (
     <div className="z-50 hidden md:flex">
-      <div className="flex flex-col gap-3 p-4">
-        <div className="flex flex-col gap-4">
-          <p>Test User</p>
-        </div>
+      <div className="flex flex-col gap-2 p-4">
+        <p className="text-xl font-bold text-center py-4">Test User</p>
         <MenuItems />
-        <Logout />
+        <div className="py-8 flex items-center justify-center">
+          <Logout />
+        </div>
       </div>
     </div>
   );

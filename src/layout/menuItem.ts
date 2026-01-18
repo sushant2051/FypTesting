@@ -1,40 +1,49 @@
+import {
+  MdDashboard,
+  MdContacts,
+  MdNotifications,
+  MdNote,
+  MdEmergency,
+  MdSettings,
+} from "react-icons/md";
+
 import type { NavigationProps } from "./types";
 
 export const MenuList: NavigationProps[] = [
   {
     id: "dashboard",
     label: "Dashboard",
-    icon: "dashboard",
+    icon: MdDashboard,
     routekey: "",
   },
   {
     id: "contacts",
     label: "Contacts",
-    icon: "contact",
+    icon: MdContacts,
     routekey: "/contacts",
   },
   {
     id: "reminders",
     label: "Reminders",
-    icon: "reminder",
+    icon: MdNotifications,
     routekey: "/reminder",
   },
   {
     id: "notes",
     label: "Notes",
-    icon: "note",
+    icon: MdNote,
     routekey: "/notes",
   },
   {
     id: "emergency",
     label: "Emergency",
-    icon: "emergency",
+    icon: MdEmergency,
     routekey: "/emergency",
   },
   {
     id: "setting",
     label: "Settings",
-    icon: "setting",
+    icon: MdSettings,
     routekey: "/settings",
   },
 ];

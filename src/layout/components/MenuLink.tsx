@@ -1,17 +1,17 @@
+import type { IconType } from "react-icons";
 import { NavLink, useLocation } from "react-router";
 
 interface MenuLinkProps {
   route: string;
-  icon?: string;
+  icon?: IconType;
   label: string;
   onClose?: () => void;
 }
 
 const MenuLink: React.FC<MenuLinkProps> = ({
   route,
-  //   icon,
+  icon: Icon,
   label,
-
   onClose,
 }) => {
   const location = useLocation();
@@ -27,10 +27,10 @@ const MenuLink: React.FC<MenuLinkProps> = ({
       >
         <NavLink
           to={route!}
-          className="flex w-full cursor-pointer items-center gap-2"
+          className="flex w-full cursor-pointer items-center gap-2 p-2"
           onClick={onClose}
         >
-          {/* {icon && <div name={icon} />} */}
+          {Icon && <Icon className="text-lg " />}
           {label}
         </NavLink>
       </div>
