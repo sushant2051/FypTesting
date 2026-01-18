@@ -6,6 +6,7 @@ import {
   type ReminderType,
 } from "./validation/reminder.validation";
 import { InputField } from "../../components/InputFiled";
+import { IoArrowBack } from "react-icons/io5";
 
 const mockContacts = [
   { id: 1, name: "Contact 1" },
@@ -161,6 +162,14 @@ const Reminder = () => {
           className="flex flex-col gap-4 border border-gray-200 rounded-md p-4"
           onSubmit={handleSubmit}
         >
+          <div>
+            <button
+              onClick={() => setShowForm(false)}
+              className="flex items-center gap-2 cursor-pointer"
+            >
+              <IoArrowBack /> Go Back
+            </button>
+          </div>
           <h2 className="font-bold text-lg">
             {editingReminder ? "Edit Reminder" : "Add Reminder"}
           </h2>
@@ -223,7 +232,7 @@ const Reminder = () => {
           </select>
           {errors.type && <p className="text-red-500">{errors.type[0]}</p>}
 
-          <div className="flex gap-2">
+          <div className="flex flex-col w-full gap-2">
             <Button type="submit" label="Save" />
             <Button
               type="button"

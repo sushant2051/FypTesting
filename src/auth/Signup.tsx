@@ -66,8 +66,8 @@ const Signup = () => {
   };
 
   return (
-    <div className="w-100 py-8">
-      <div className="border border-gray-200 w-full rounded-md p-6">
+    <div className="w-100 py-8 ">
+      <div className="border border-gray-200 w-full rounded-md shadow-md p-6">
         <div className="pb-5 text-center">
           <p className="text-xl font-bold">Create an account</p>
           <p>Signup and start using samparka diary</p>

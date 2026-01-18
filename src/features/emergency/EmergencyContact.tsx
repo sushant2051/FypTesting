@@ -1,7 +1,6 @@
-import { IoCall } from "react-icons/io5";
+import { IoCall, IoArrowBack } from "react-icons/io5";
 import { Button } from "../../components/Button";
 import { useState } from "react";
-
 import z from "zod";
 import {
   EmergencyContactSchema,
@@ -24,10 +23,12 @@ const EmergencyContact = () => {
   ]);
 
   const [showForm, setShowForm] = useState(false);
+
   const [formData, setFormData] = useState<EmergencyContactType>({
     name: "",
     phone: "",
   });
+
   const [errors, setErrors] = useState<Record<string, string[]>>({});
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,7 +58,7 @@ const EmergencyContact = () => {
         const fieldErrors: Record<string, string[]> = {};
         err.issues.forEach((issue) => {
           const key = issue.path[0] as string;
-          if (!fieldErrors[key]) fieldErrors[key] = [];
+          fieldErrors[key] = fieldErrors[key] || [];
           fieldErrors[key].push(issue.message);
         });
         setErrors(fieldErrors);
@@ -70,23 +71,60 @@ const EmergencyContact = () => {
       name: "",
       phone: "",
     });
+  };
+
+  const handleBack = () => {
     setShowForm(false);
+    setFormData({ name: "", phone: "" });
+    setErrors({});
   };
 
   return (
-    <div className="py-6 flex flex-col gap-4 sm:gap-6">
-      <div>
-        <Button
-          label="Add Emergency Contact"
-          onClick={() => setShowForm(true)}
-        />
-      </div>
+    <div className="py-6 flex flex-col gap-4 w-full">
+      {!showForm ? (
+        <>
+          <div>
+            <Button
+              label="Add Emergency Contact"
+              onClick={() => setShowForm(true)}
+            />
+          </div>
 
-      {showForm && (
+          <div className="border border-gray-200 rounded-md p-4 w-full">
+            {contacts.map((contact) => (
+              <div key={contact.id}>
+                <div className="flex items-center justify-between py-2">
+                  <div className="flex items-center gap-1">
+                    <p>{contact.name}</p>
+                    <p>-</p>
+                    <p>{contact.phone}</p>
+                  </div>
+                  <IoCall className="text-blue-900 h-6 w-6" />
+                </div>
+                <hr className="border-gray-300" />
+              </div>
+            ))}
+
+            {contacts.length === 0 && (
+              <p className="text-gray-500 py-2">No emergency contacts added</p>
+            )}
+          </div>
+        </>
+      ) : (
         <form
-          className="flex flex-col gap-2 border border-gray-200 w-full rounded-md p-4"
+          className="flex flex-col gap-3 border border-gray-200 rounded-md p-4"
           onSubmit={handleSubmit}
         >
+          <button
+            type="button"
+            className="flex items-center gap-2 mb-2 cursor-pointer"
+            onClick={handleBack}
+          >
+            <IoArrowBack /> Go Back
+          </button>
+
+          <h2 className="text-lg font-bold">Add Emergency Contact</h2>
+
           <InputField
             label="Name"
             type="text"
@@ -96,6 +134,7 @@ const EmergencyContact = () => {
             onChange={handleChange}
             errors={errors.name}
           />
+
           <InputField
             label="Phone Number"
             type="text"
@@ -105,7 +144,8 @@ const EmergencyContact = () => {
             onChange={handleChange}
             errors={errors.phone}
           />
-          <Button type="submit" label="Add Contact" />
+
+          <Button type="submit" label="Save Contact" />
           <Button
             onClick={handleResetForm}
             variant="outline"
@@ -114,22 +154,6 @@ const EmergencyContact = () => {
           />
         </form>
       )}
-
-      <div className="border border-gray-200 rounded-md p-4 w-full">
-        {contacts.map((contact) => (
-          <div key={contact.id}>
-            <div className="flex items-center justify-between py-2">
-              <div className="flex items-center gap-1">
-                <p>{contact.name}</p>
-                <p>-</p>
-                <p>{contact.phone}</p>
-              </div>
-              <IoCall className="text-blue-900 h-6 w-6" />
-            </div>
-            <hr className="border-gray-300" />
-          </div>
-        ))}
-      </div>
     </div>
   );
 };
