@@ -6,11 +6,15 @@ import NotePage from "./pages/NotePage";
 import ReminderPage from "./pages/ReminderPage";
 import EmergencyPage from "./pages/EmergencyPage";
 import SettingPage from "./pages/SettingPage";
+import SignupPage from "./pages/SignupPage";
+import LoginPage from "./pages/LoginPage";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/signup" element={<SignupPage />} />
+        <Route path="/login" element={<LoginPage />} />
         <Route element={<Layout />}>
           <Route path="" element={<DashboardPage />} />
           <Route path="/contacts" element={<ContactPage />} />

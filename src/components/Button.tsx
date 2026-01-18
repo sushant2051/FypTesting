@@ -1,6 +1,7 @@
 interface ButtonProps {
   label: string;
-  onClick: () => void;
+  onClick?: () => void;
+  type?: 'submit' | 'button' | 'reset';
   variant?: "primary" | "secondary" | "outline";
 }
 
@@ -14,10 +15,12 @@ const Button: React.FC<ButtonProps> = ({
   label,
   onClick,
   variant = "primary",
+  type = 'button',
 }) => {
   return (
     <button
       onClick={onClick}
+      type={type}
       className={`
         cursor-pointer
         px-4 py-2
