@@ -12,21 +12,21 @@ import { InputField } from "../../components/InputFiled";
 type Contact = {
   id: number;
   name: string;
-  number: string;
+  phone: string;
 };
 
 const EmergencyContact = () => {
   const [contacts, setContacts] = useState<Contact[]>([
-    { id: 1, name: "Example 1", number: "9806053511" },
-    { id: 2, name: "Example 2", number: "9806053522" },
-    { id: 3, name: "Example 3", number: "9806053533" },
-    { id: 4, name: "Example 4", number: "9806053544" },
+    { id: 1, name: "Example 1", phone: "9806053511" },
+    { id: 2, name: "Example 2", phone: "9806053522" },
+    { id: 3, name: "Example 3", phone: "9806053533" },
+    { id: 4, name: "Example 4", phone: "9806053544" },
   ]);
 
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState<EmergencyContactType>({
     name: "",
-    number: "",
+    phone: "",
   });
   const [errors, setErrors] = useState<Record<string, string[]>>({});
 
@@ -46,11 +46,11 @@ const EmergencyContact = () => {
       const newContact: Contact = {
         id: contacts.length + 1,
         name: data.name,
-        number: data.number,
+        phone: data.phone,
       };
 
       setContacts((prev) => [...prev, newContact]);
-      setFormData({ name: "", number: "" });
+      setFormData({ name: "", phone: "" });
       setShowForm(false);
     } catch (err) {
       if (err instanceof z.ZodError) {
@@ -76,7 +76,7 @@ const EmergencyContact = () => {
 
       {showForm && (
         <form
-          className="flex flex-col gap-2 border border-gray-200 w-full max-w-150 rounded-md p-4"
+          className="flex flex-col gap-2 border border-gray-200 w-full rounded-md p-4"
           onSubmit={handleSubmit}
         >
           <InputField
@@ -91,11 +91,11 @@ const EmergencyContact = () => {
           <InputField
             label="Phone Number"
             type="text"
-            name="number"
+            name="phone"
             placeholder="Number"
-            value={formData.number}
+            value={formData.phone}
             onChange={handleChange}
-            errors={errors.name}
+            errors={errors.phone}
           />
           <Button type="submit" label="Add Contact" />
         </form>
@@ -108,7 +108,7 @@ const EmergencyContact = () => {
               <div className="flex items-center gap-1">
                 <p>{contact.name}</p>
                 <p>-</p>
-                <p>{contact.number}</p>
+                <p>{contact.phone}</p>
               </div>
               <IoCall className="text-blue-900 h-6 w-6" />
             </div>
