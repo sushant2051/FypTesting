@@ -1,4 +1,7 @@
 import { Button } from "../../components/Button";
+import Charts from "./components/Charts";
+import OverviewAnalyticsChart from "./components/OverviewAnalyticsChart";
+import RecentCompletedReminders from "./components/RecentCompletedReminders";
 
 const DashboardData = [
   { id: 1, reminder: "Sample reminder 1", date: "2026-5-10" },
@@ -30,10 +33,17 @@ const Dashboard = () => {
           ))}
         </div>
       </div>
+      <div>
+        <Charts />
+      </div>
+      <div>
+        <RecentCompletedReminders />
+      </div>
       <div className="flex items-center gap-4 py-4">
         <Button variant="teritary" label="System Status" />
         <Button variant="teritary" label="View Logs" />
       </div>
+      <OverviewAnalyticsChart />
     </div>
   );
 };
