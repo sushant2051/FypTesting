@@ -33,15 +33,15 @@ const Dashboard = () => {
           ))}
         </div>
       </div>
+      <div className="flex items-center gap-4 py-4">
+        <Button variant="teritary" label="System Status" />
+        <Button variant="teritary" label="View Logs" />
+      </div>
       <div>
         <Charts />
       </div>
       <div>
         <RecentCompletedReminders />
-      </div>
-      <div className="flex items-center gap-4 py-4">
-        <Button variant="teritary" label="System Status" />
-        <Button variant="teritary" label="View Logs" />
       </div>
       <OverviewAnalyticsChart />
     </div>
