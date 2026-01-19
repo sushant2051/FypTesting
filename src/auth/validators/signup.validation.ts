@@ -11,11 +11,8 @@ export const SignupSchema = z
 
     phone: z
       .string()
-      .optional()
-      .refine(
-        (val) => !val || /^\d{10}$/.test(val),
-        "Phone number must be 10 digits",
-      ),
+      .nonempty("Phone number is required")
+      .regex(/^\d{10}$/, "Phone number must be 10 digits"),
 
     password: z.string().min(6, "Password must be at least 6 characters"),
 

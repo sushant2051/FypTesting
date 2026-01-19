@@ -12,7 +12,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState<LoginSchemaType>({
-    email: "",
+    phone: "",
     password: "",
   });
 
@@ -68,11 +68,11 @@ const Login = () => {
         <form className="flex flex-col gap-4 p-4" onSubmit={handleSubmit}>
           <InputField
             autoFocus
-            label="Email"
-            name="email"
-            value={formData.email}
+            label="Phone number"
+            name="phone"
+            value={formData.phone}
             onChange={handleChange}
-            errors={errors.email}
+            errors={errors.phone}
           />
 
           <InputField

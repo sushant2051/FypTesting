@@ -92,7 +92,7 @@ const Signup = () => {
           />
 
           <InputField
-            label="Phone Number (Optional)"
+            label="Phone Number"
             name="phone"
             value={formData.phone}
             onChange={handleChange}
