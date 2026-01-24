@@ -3,6 +3,7 @@ import z from "zod";
 import { Button } from "../../components/Button";
 import { IoArrowBack } from "react-icons/io5";
 import { NoteSchema, type NoteType } from "./validation/notes.validation";
+import { InputField } from "../../components/InputFiled";
 
 const mockContacts = [
   { id: 1, name: "Contact 1" },
@@ -41,6 +42,7 @@ const Notes = () => {
   const [editingNote, setEditingNote] = useState<SavedNote | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [errors, setErrors] = useState<Record<string, string[]>>({});
+  const [searchValue, setSearchValue] = useState("");
 
   const handleChange = (
     e: React.ChangeEvent<HTMLSelectElement | HTMLTextAreaElement>,
@@ -124,12 +126,20 @@ const Notes = () => {
     });
   };
 
+  const filteredNotes = notes.filter((note) =>
+    note.contactName.toLowerCase().includes(searchValue.toLowerCase()),
+  );
+
   return (
     <div className="p-6 w-full flex flex-col gap-4">
       {!showForm ? (
         <>
           <h2 className="text-lg font-bold py-4">Notes</h2>
           <div className="flex justify-between items-center">
+            <InputField
+              placeholder="Search notes"
+              onChange={(e) => setSearchValue(e.target.value)}
+            />
             <Button label="Add Note" onClick={handleAddNote} />
           </div>
 
@@ -140,7 +150,7 @@ const Notes = () => {
               <span className="w-1/4 text-center">Actions</span>
             </div>
 
-            {notes.map((note) => (
+            {filteredNotes.map((note) => (
               <div key={note.id}>
                 <div className="flex px-4 py-2 items-center">
                   <span className="w-1/4">{note.contactName}</span>

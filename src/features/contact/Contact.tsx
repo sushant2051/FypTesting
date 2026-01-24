@@ -70,6 +70,8 @@ const Contact = () => {
   const [groupName, setGroupName] = useState("");
   const [selectedContacts, setSelectedContacts] = useState<number[]>([]);
 
+  const [selectedGroup, setSelectedGroup] = useState<GroupType | null>(null);
+
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
@@ -261,7 +263,11 @@ const Contact = () => {
 
           <div className="border rounded-md">
             {groups.map((group) => (
-              <div key={group.id} className="p-4 border-b">
+              <div
+                key={group.id}
+                onClick={() => setSelectedGroup(group)}
+                className="p-4 cursor-pointer border-b"
+              >
                 <p className="font-bold">{group.name}</p>
                 <p className="text-sm text-gray-500">
                   {group.members.map((m) => m.name).join(", ")}
@@ -305,6 +311,30 @@ const Contact = () => {
           ))}
 
           <Button label="Save Group" onClick={handleCreateGroup} />
+        </div>
+      )}
+      {selectedGroup && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-white w-full max-w-md rounded-md p-4">
+            <div className="flex justify-between items-center mb-3">
+              <h2 className="font-bold text-lg">{selectedGroup.name}</h2>
+              <button
+                className="cursor-pointer"
+                onClick={() => setSelectedGroup(null)}
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              {selectedGroup.members.map((m) => (
+                <div key={m.id} className="flex justify-between border-b pb-1">
+                  <span>{m.name}</span>
+                  <span>{m.phone}</span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       )}
     </div>

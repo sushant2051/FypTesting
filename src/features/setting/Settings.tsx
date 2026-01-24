@@ -11,6 +11,7 @@ import z from "zod";
 const Settings = () => {
   const [isPasswordChange, setIsPasswordChange] = useState<boolean>(false);
   const [passwordData, setPasswordData] = useState<PasswordChangeType>({
+    oldPassword: "",
     newPassword: "",
     confirmPassword: "",
   });
@@ -76,9 +77,19 @@ const Settings = () => {
           <p className="text-medium py-5">Change your password</p>
           <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
             <InputField
+              label="Old password"
+              name="oldPassword"
+              type="password"
+              placeholder="Old password"
+              value={passwordData.oldPassword}
+              onChange={handleChange}
+              errors={errors.oldPassword}
+            />
+            <InputField
               label="New password"
               name="newPassword"
               type="password"
+              placeholder="New password"
               value={passwordData.newPassword}
               onChange={handleChange}
               errors={errors.newPassword}

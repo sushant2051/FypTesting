@@ -23,6 +23,7 @@ const Reminder = () => {
   const [editingReminder, setEditingReminder] = useState<ReminderRow | null>(
     null,
   );
+  const [searchValue, setSearchValue] = useState("");
 
   const [reminders, setReminders] = useState<ReminderRow[]>([
     {
@@ -116,12 +117,20 @@ const Reminder = () => {
   const getContactName = (id: number) =>
     mockContacts.find((c) => c.id === id)?.name || "-";
 
+  const filteredData = reminders.filter((reminder) =>
+    reminder.title.toLowerCase().includes(searchValue.toLowerCase()),
+  );
+
   return (
     <div className="p-6 w-full flex flex-col gap-4">
       {!showForm ? (
         <>
           <p className="text-xl font-bold py-4">Reminders</p>
-          <div>
+          <div className="flex justify-between">
+            <InputField
+              placeholder="Search reminder"
+              onChange={(e) => setSearchValue(e.target.value)}
+            />
             <Button label="Add Reminder" onClick={handleAdd} />
           </div>
 
@@ -134,7 +143,7 @@ const Reminder = () => {
               <span className="w-1/5 text-center">Actions</span>
             </div>
 
-            {reminders.map((reminder) => (
+            {filteredData.map((reminder) => (
               <div key={reminder.id}>
                 <div className="flex px-4 py-2">
                   <span className="w-1/5">

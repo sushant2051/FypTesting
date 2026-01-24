@@ -11,27 +11,33 @@ import { InputField } from "../../components/InputFiled";
 type Contact = {
   id: number;
   name: string;
+  relationship: string;
   phone: string;
 };
 
+const relationshipOptions = ["Father", "Mother", "Brother", "Sister", "Friend"];
+
 const EmergencyContact = () => {
   const [contacts, setContacts] = useState<Contact[]>([
-    { id: 1, name: "Example 1", phone: "9806053511" },
-    { id: 2, name: "Example 2", phone: "9806053522" },
-    { id: 3, name: "Example 3", phone: "9806053533" },
-    { id: 4, name: "Example 4", phone: "9806053544" },
+    { id: 1, name: "Example 1", relationship: "Fater", phone: "9806053511" },
+    { id: 2, name: "Example 2", relationship: "Brother", phone: "9806053522" },
+    { id: 3, name: "Example 3", relationship: "Sister", phone: "9806053533" },
+    { id: 4, name: "Example 4", relationship: "Friend", phone: "9806053544" },
   ]);
 
   const [showForm, setShowForm] = useState(false);
 
   const [formData, setFormData] = useState<EmergencyContactType>({
     name: "",
+    relationship: "",
     phone: "",
   });
 
   const [errors, setErrors] = useState<Record<string, string[]>>({});
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     setErrors((prev) => ({ ...prev, [name]: [] }));
@@ -47,11 +53,12 @@ const EmergencyContact = () => {
       const newContact: Contact = {
         id: contacts.length + 1,
         name: data.name,
+        relationship: data.relationship,
         phone: data.phone,
       };
 
       setContacts((prev) => [...prev, newContact]);
-      setFormData({ name: "", phone: "" });
+      setFormData({ name: "", phone: "", relationship: "" });
       setShowForm(false);
     } catch (err) {
       if (err instanceof z.ZodError) {
@@ -70,12 +77,13 @@ const EmergencyContact = () => {
     setFormData({
       name: "",
       phone: "",
+      relationship: "",
     });
   };
 
   const handleBack = () => {
     setShowForm(false);
-    setFormData({ name: "", phone: "" });
+    setFormData({ name: "", phone: "", relationship: "" });
     setErrors({});
   };
 
@@ -94,11 +102,14 @@ const EmergencyContact = () => {
             {contacts.map((contact) => (
               <div key={contact.id}>
                 <div className="flex items-center justify-between py-2">
-                  <div className="flex items-center gap-1">
-                    <p>{contact.name}</p>
-                    <p>-</p>
-                    <p>{contact.phone}</p>
+                  <div className="flex-1 gap-1">
+                    <div className="flex items-center gap-1">
+                      <p>{contact.name}</p>
+                      <p>-</p>
+                      <p>{contact.phone}</p>
+                    </div>
                   </div>
+                  <p className="flex-1">{contact.relationship}</p>
                   <IoCall className="text-blue-900 h-6 w-6" />
                 </div>
                 <hr className="border-gray-300" />
@@ -144,6 +155,20 @@ const EmergencyContact = () => {
             onChange={handleChange}
             errors={errors.phone}
           />
+          <div className="w-full text-sm">
+            <p className="mb-1">Relationship</p>
+            <select
+              name="relationship"
+              value={formData.relationship}
+              onChange={handleChange}
+              className="border p-2 rounded w-full"
+            >
+              <option value="">Relationship</option>
+              {relationshipOptions.map((r) => (
+                <option key={r}>{r}</option>
+              ))}
+            </select>
+          </div>
 
           <Button type="submit" label="Save Contact" />
           <Button
