@@ -8,9 +8,19 @@ import {
   type ContactType,
 } from "./validation/contact.validation";
 
+type GroupType = {
+  id: number;
+  name: string;
+  members: ContactType[];
+};
+
 const relationshipOptions = ["Father", "Mother", "Brother", "Sister", "Friend"];
 
 const Contact = () => {
+  const [activeTab, setActiveTab] = useState<"INDIVIDUAL" | "GROUP">(
+    "INDIVIDUAL",
+  );
+
   const [contacts, setContacts] = useState<ContactType[]>([
     {
       id: 1,
@@ -38,10 +48,14 @@ const Contact = () => {
     },
   ]);
 
+  const [groups, setGroups] = useState<GroupType[]>([]);
+
   const [showForm, setShowForm] = useState(false);
+  const [showGroupForm, setShowGroupForm] = useState(false);
   const [editingContact, setEditingContact] = useState<ContactType | null>(
     null,
   );
+
   const [formData, setFormData] = useState<Omit<ContactType, "id">>({
     name: "",
     phone: "",
@@ -49,8 +63,12 @@ const Contact = () => {
     relationship: "",
     note: "",
   });
+
   const [errors, setErrors] = useState<Record<string, string[]>>({});
   const [searchQuery, setSearchQuery] = useState("");
+
+  const [groupName, setGroupName] = useState("");
+  const [selectedContacts, setSelectedContacts] = useState<number[]>([]);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -63,7 +81,13 @@ const Contact = () => {
   };
 
   const handleAddContact = () => {
-    setFormData({ name: "", phone: "", email: "", relationship: "", note: "" });
+    setFormData({
+      name: "",
+      phone: "",
+      email: "",
+      relationship: "",
+      note: "",
+    });
     setEditingContact(null);
     setShowForm(true);
   };
@@ -75,54 +99,53 @@ const Contact = () => {
     setShowForm(true);
   };
 
-  const handleBack = () => {
-    setShowForm(false);
-    setEditingContact(null);
-  };
-
   const handleDelete = (id: number) => {
     setContacts((prev) => prev.filter((c) => c.id !== id));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
     try {
       const data = ContactSchema.parse(formData);
-      setErrors({});
 
       if (editingContact) {
         setContacts((prev) =>
           prev.map((c) => (c.id === editingContact.id ? { ...c, ...data } : c)),
         );
       } else {
-        const newContact: ContactType = {
-          id: contacts.length + 1,
-          ...data,
-        };
-        setContacts((prev) => [...prev, newContact]);
+        setContacts((prev) => [...prev, { id: prev.length + 1, ...data }]);
       }
 
       setShowForm(false);
       setEditingContact(null);
-      setFormData({
-        name: "",
-        phone: "",
-        email: "",
-        relationship: "",
-        note: "",
-      });
     } catch (err) {
       if (err instanceof z.ZodError) {
         const fieldErrors: Record<string, string[]> = {};
         err.issues.forEach((issue) => {
-          const key = issue.path[0] as string;
-          if (!fieldErrors[key]) fieldErrors[key] = [];
-          fieldErrors[key].push(issue.message);
+          fieldErrors[issue.path[0] as string] = [issue.message];
         });
         setErrors(fieldErrors);
       }
     }
+  };
+
+  const toggleContactSelection = (id: number) => {
+    setSelectedContacts((prev) =>
+      prev.includes(id) ? prev.filter((cid) => cid !== id) : [...prev, id],
+    );
+  };
+
+  const handleCreateGroup = () => {
+    const newGroup: GroupType = {
+      id: groups.length + 1,
+      name: groupName,
+      members: contacts.filter((c) => selectedContacts.includes(c.id)),
+    };
+
+    setGroups((prev) => [...prev, newGroup]);
+    setGroupName("");
+    setSelectedContacts([]);
+    setShowGroupForm(false);
   };
 
   const filteredContacts = contacts.filter(
@@ -133,12 +156,22 @@ const Contact = () => {
 
   return (
     <div className="p-6 w-full flex flex-col gap-4">
-      {!showForm ? (
+      <div className="flex gap-2">
+        <Button
+          label="Individual"
+          variant={activeTab === "INDIVIDUAL" ? "primary" : "outline"}
+          onClick={() => setActiveTab("INDIVIDUAL")}
+        />
+        <Button
+          label="Group"
+          variant={activeTab === "GROUP" ? "primary" : "outline"}
+          onClick={() => setActiveTab("GROUP")}
+        />
+      </div>
+      {activeTab === "INDIVIDUAL" && !showForm && (
         <>
-          <p className="text-xl font-bold py-4">Contacts</p>
-          <div className="flex items-center gap-4 mb-4">
+          <div className="flex justify-between">
             <InputField
-              type="text"
               placeholder="Search contacts"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -146,123 +179,133 @@ const Contact = () => {
             <Button label="Add Contact" onClick={handleAddContact} />
           </div>
 
-          <div className="border border-gray-200 rounded-md overflow-hidden">
-            <div className="flex px-4 py-2 bg-gray-100 font-bold">
-              <span className="w-1/4">Name</span>
-              <span className="w-1/4">Phone</span>
-              <span className="w-1/4">Relationship</span>
-              <span className="w-1/4 text-center">Action</span>
-            </div>
-
-            <div className="flex flex-col">
-              {filteredContacts.map((contact) => (
-                <div key={contact.id}>
-                  <div className="flex px-4 py-2 items-center">
-                    <span className="w-1/4">{contact.name}</span>
-                    <span className="w-1/4">{contact.phone}</span>
-                    <span className="w-1/4">{contact.relationship}</span>
-                    <span className="w-1/4 flex justify-center gap-2">
-                      <Button
-                        label="edit"
-                        onClick={() => handleEdit(contact)}
-                      />
-
-                      <Button
-                        variant="secondary"
-                        label="Delete"
-                        onClick={() => handleDelete(contact.id)}
-                      />
-                    </span>
-                  </div>
-                  <hr className="border-gray-300 mx-4" />
-                </div>
-              ))}
-
-              {filteredContacts.length === 0 && (
-                <p className="px-4 py-2 text-gray-500">No contacts found</p>
-              )}
-            </div>
+          <div className="border rounded-md">
+            {filteredContacts.map((c) => (
+              <div key={c.id} className="flex px-4 py-2 justify-between">
+                <span>{c.name}</span>
+                <span className="flex gap-2">
+                  <Button label="Edit" onClick={() => handleEdit(c)} />
+                  <Button
+                    label="Delete"
+                    variant="secondary"
+                    onClick={() => handleDelete(c.id)}
+                  />
+                </span>
+              </div>
+            ))}
           </div>
         </>
-      ) : (
+      )}
+
+      {activeTab === "INDIVIDUAL" && showForm && (
         <form
-          className="flex flex-col gap-2 border border-gray-200 rounded-md p-4 mt-4"
+          className="border p-4 flex flex-col gap-2"
           onSubmit={handleSubmit}
         >
           <button
             type="button"
-            className="flex items-center gap-2 mb-2 cursor-pointer"
-            onClick={handleBack}
+            onClick={() => setShowForm(false)}
+            className="flex items-center gap-2"
           >
             <IoArrowBack /> Go Back
           </button>
 
-          <h2 className="font-bold text-lg">
-            {editingContact ? "Edit Contact" : "Add Contact"}
-          </h2>
-
           <InputField
-            label="Name"
-            type="text"
             name="name"
+            label="Name"
             value={formData.name}
             onChange={handleChange}
             errors={errors.name}
           />
-
           <InputField
-            label="Phone Number"
-            type="text"
             name="phone"
+            label="Phone"
             value={formData.phone}
             onChange={handleChange}
             errors={errors.phone}
           />
-
           <InputField
-            label="Email"
-            type="email"
             name="email"
+            label="Email"
             value={formData.email}
             onChange={handleChange}
             errors={errors.email}
           />
 
-          <div className="flex flex-col gap-1">
-            <label className="text-sm">Relationship</label>
-            <select
-              name="relationship"
-              value={formData.relationship}
-              onChange={handleChange}
-              className="border p-2 rounded w-full"
-            >
-              <option value="">Select relationship</option>
-              {relationshipOptions.map((rel) => (
-                <option key={rel} value={rel}>
-                  {rel}
-                </option>
-              ))}
-            </select>
-            {errors.relationship && (
-              <p className="text-red-500 text-sm">{errors.relationship[0]}</p>
+          <select
+            name="relationship"
+            value={formData.relationship}
+            onChange={handleChange}
+            className="border p-2 rounded"
+          >
+            <option value="">Relationship</option>
+            {relationshipOptions.map((r) => (
+              <option key={r}>{r}</option>
+            ))}
+          </select>
+
+          <textarea
+            name="note"
+            value={formData.note}
+            onChange={handleChange}
+            className="border p-2 rounded"
+          />
+
+          <Button type="submit" label="Save Contact" />
+        </form>
+      )}
+
+      {activeTab === "GROUP" && !showGroupForm && (
+        <>
+          <Button label="Create Group" onClick={() => setShowGroupForm(true)} />
+
+          <div className="border rounded-md">
+            {groups.map((group) => (
+              <div key={group.id} className="p-4 border-b">
+                <p className="font-bold">{group.name}</p>
+                <p className="text-sm text-gray-500">
+                  {group.members.map((m) => m.name).join(", ")}
+                </p>
+              </div>
+            ))}
+
+            {groups.length === 0 && (
+              <p className="p-4 text-gray-500">No groups created</p>
             )}
           </div>
+        </>
+      )}
 
-          <div className="flex flex-col gap-1">
-            <label className="text-sm">Note</label>
-            <textarea
-              name="note"
-              value={formData.note}
-              onChange={handleChange}
-              className="border p-2 rounded w-full h-24 resize-none"
-            />
-          </div>
+      {activeTab === "GROUP" && showGroupForm && (
+        <div className="border p-4 flex flex-col gap-4">
+          <button
+            type="button"
+            onClick={() => setShowGroupForm(false)}
+            className="flex items-center gap-2"
+          >
+            <IoArrowBack /> Go Back
+          </button>
 
-          <Button
-            type="submit"
-            label={editingContact ? "Update Contact" : "Add Contact"}
+          <InputField
+            label="Group Name"
+            value={groupName}
+            onChange={(e) => setGroupName(e.target.value)}
+            errors={errors.groupName}
           />
-        </form>
+
+          {contacts.map((c) => (
+            <label key={c.id} className="flex gap-2">
+              <input
+                type="checkbox"
+                checked={selectedContacts.includes(c.id)}
+                onChange={() => toggleContactSelection(c.id)}
+              />
+              {c.name}
+            </label>
+          ))}
+
+          <Button label="Save Group" onClick={handleCreateGroup} />
+        </div>
       )}
     </div>
   );

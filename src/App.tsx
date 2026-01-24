@@ -8,6 +8,7 @@ import EmergencyPage from "./pages/EmergencyPage";
 import SettingPage from "./pages/SettingPage";
 import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
+import LogsPage from "./pages/LogsPage";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="/notes" element={<NotePage />} />
           <Route path="/emergency" element={<EmergencyPage />} />
           <Route path="/settings" element={<SettingPage />} />
+          <Route path="/logs" element={<LogsPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

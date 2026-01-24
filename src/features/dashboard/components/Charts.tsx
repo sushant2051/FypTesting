@@ -25,7 +25,7 @@ const COLORS = ["#3b82f6", "#22c55e", "#f97316"]; // blue, green, orange
 
 const Charts = () => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 py-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {/* Upcoming Reminders */}
       <div className="border border-gray-200 rounded-md p-4">
         <p className="font-bold mb-4">Upcoming Reminders</p>
