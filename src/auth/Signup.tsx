@@ -20,6 +20,7 @@ const Signup = () => {
   });
 
   const [errors, setErrors] = useState<Record<string, string[]>>({});
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -65,6 +66,10 @@ const Signup = () => {
     navigate("/login");
   };
 
+  const hanldeToggleShowPassword = () => {
+    setShowPassword((prev) => !prev);
+  };
+
   return (
     <div className="w-100 py-8 ">
       <div className="border border-gray-200 w-full rounded-md shadow-md p-6">
@@ -102,7 +107,7 @@ const Signup = () => {
           <InputField
             autoComplete="password"
             label="Password"
-            type="password"
+            type={showPassword ? "text" : "password"}
             name="password"
             value={formData.password}
             onChange={handleChange}
@@ -112,12 +117,26 @@ const Signup = () => {
           <InputField
             autoComplete="password"
             label="Confirm Password"
-            type="password"
+            type={showPassword ? "text" : "password"}
             name="confirmPassword"
             value={formData.confirmPassword}
             onChange={handleChange}
             errors={errors.confirmPassword}
           />
+
+          <div className="flex items-center gap-2">
+            {" "}
+            <input
+              type="checkbox"
+              checked={showPassword}
+              onChange={hanldeToggleShowPassword}
+              id="showPassword"
+            />
+            <label htmlFor="showPassword" className="cursor-pointer">
+              {" "}
+              Show password
+            </label>
+          </div>
 
           <Button label="Signup" type="submit" />
         </form>

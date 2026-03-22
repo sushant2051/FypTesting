@@ -1,5 +1,6 @@
 interface ButtonProps {
-  label: string;
+  label?: string;
+  children?: React.ReactNode;
   onClick?: () => void;
   type?: "submit" | "button" | "reset";
   variant?: "primary" | "secondary" | "outline" | "teritary";
@@ -17,7 +18,9 @@ const Button: React.FC<ButtonProps> = ({
   onClick,
   variant = "primary",
   type = "button",
+  children,
 }) => {
+  const content = label || children;
   return (
     <button
       onClick={onClick}
@@ -30,7 +33,7 @@ const Button: React.FC<ButtonProps> = ({
         ${variantClasses[variant]}
       `}
     >
-      {label}
+      {content}
     </button>
   );
 };
