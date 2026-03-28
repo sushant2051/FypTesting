@@ -7,6 +7,18 @@ import {
   type EmergencyContactType,
 } from "./validation/emergencyContact.validation";
 import { InputField } from "../../components/InputFiled";
+import { FaPlusCircle } from "react-icons/fa";
+import MotionWrapper from "../../components/animation/MotionWrapper";
+import {
+  blurIn,
+  fadeDown,
+  rotateIn,
+  scaleIn,
+  slideLeft,
+  slideRight,
+} from "../../components/animation/Variants";
+import { FaCheck } from "react-icons/fa";
+import { MdCancel } from "react-icons/md";
 
 type Contact = {
   id: number;
@@ -19,7 +31,7 @@ const relationshipOptions = ["Father", "Mother", "Brother", "Sister", "Friend"];
 
 const EmergencyContact = () => {
   const [contacts, setContacts] = useState<Contact[]>([
-    { id: 1, name: "Example 1", relationship: "Fater", phone: "9806053511" },
+    { id: 1, name: "Example 1", relationship: "Father", phone: "9806053511" },
     { id: 2, name: "Example 2", relationship: "Brother", phone: "9806053522" },
     { id: 3, name: "Example 3", relationship: "Sister", phone: "9806053533" },
     { id: 4, name: "Example 4", relationship: "Friend", phone: "9806053544" },
@@ -91,34 +103,48 @@ const EmergencyContact = () => {
     <div className="py-6 flex flex-col gap-4 w-full">
       {!showForm ? (
         <>
-          <div>
-            <Button
-              label="Add Emergency Contact"
-              onClick={() => setShowForm(true)}
-            />
-          </div>
-
+          <MotionWrapper variants={scaleIn}>
+            <div>
+              <Button
+                label="Add Emergency Contact"
+                onClick={() => setShowForm(true)}
+              >
+                <FaPlusCircle />
+              </Button>
+            </div>
+          </MotionWrapper>
           <div className="border border-gray-200 rounded-md p-4 w-full">
             {contacts.map((contact) => (
               <div key={contact.id}>
                 <div className="flex items-center justify-between py-2">
-                  <div className="flex-1 gap-1">
-                    <div className="flex items-center gap-1">
-                      <p>{contact.name}</p>
-                      <p>-</p>
-                      <p>{contact.phone}</p>
+                  <MotionWrapper variants={slideRight}>
+                    <div className="flex-1 gap-1">
+                      <div className="flex items-center gap-1">
+                        <p>{contact.name}</p>
+                        <p>-</p>
+                        <p>{contact.phone}</p>
+                      </div>
                     </div>
-                  </div>
-                  <p className="flex-1">{contact.relationship}</p>
-                  <IoCall className="text-blue-900 h-6 w-6" />
+                  </MotionWrapper>
+                  <MotionWrapper variants={fadeDown}>
+                    <p className="flex-1">{contact.relationship}</p>
+                  </MotionWrapper>
+                  <MotionWrapper variants={slideLeft}>
+                    <div>
+                      <IoCall className="text-blue-900 h-6 w-6" />
+                    </div>
+                  </MotionWrapper>
                 </div>
                 <hr className="border-gray-300" />
               </div>
             ))}
-
-            {contacts.length === 0 && (
-              <p className="text-gray-500 py-2">No emergency contacts added</p>
-            )}
+            <MotionWrapper variants={blurIn}>
+              {contacts.length === 0 && (
+                <p className="text-gray-500 py-2">
+                  No emergency contacts added
+                </p>
+              )}
+            </MotionWrapper>
           </div>
         </>
       ) : (
@@ -126,57 +152,71 @@ const EmergencyContact = () => {
           className="flex flex-col gap-3 border border-gray-200 rounded-md p-4"
           onSubmit={handleSubmit}
         >
-          <button
-            type="button"
-            className="flex items-center gap-2 mb-2 cursor-pointer"
-            onClick={handleBack}
-          >
-            <IoArrowBack /> Go Back
-          </button>
-
-          <h2 className="text-lg font-bold">Add Emergency Contact</h2>
-
-          <InputField
-            label="Name"
-            type="text"
-            name="name"
-            placeholder="Name"
-            value={formData.name}
-            onChange={handleChange}
-            errors={errors.name}
-          />
-
-          <InputField
-            label="Phone Number"
-            type="text"
-            name="phone"
-            placeholder="Phone number"
-            value={formData.phone}
-            onChange={handleChange}
-            errors={errors.phone}
-          />
-          <div className="w-full text-sm">
-            <p className="mb-1">Relationship</p>
-            <select
-              name="relationship"
-              value={formData.relationship}
-              onChange={handleChange}
-              className="border p-2 rounded w-full"
+          <MotionWrapper variants={scaleIn}>
+            <button
+              type="button"
+              className="flex items-center gap-2 mb-2 cursor-pointer"
+              onClick={handleBack}
             >
-              <option value="">Relationship</option>
-              {relationshipOptions.map((r) => (
-                <option key={r}>{r}</option>
-              ))}
-            </select>
-          </div>
-
-          <Button type="submit" label="Save Contact" />
-          <Button
-            onClick={handleResetForm}
-            variant="outline"
-            type="reset"
-            label="Cancel"
-          />
+              <IoArrowBack /> Go Back
+            </button>
+          </MotionWrapper>
+          <MotionWrapper variants={rotateIn}>
+            <h2 className="text-lg font-bold">Add Emergency Contact</h2>{" "}
+          </MotionWrapper>
+          <MotionWrapper variants={slideLeft}>
+            <InputField
+              label="Name"
+              type="text"
+              name="name"
+              placeholder="Name"
+              value={formData.name}
+              onChange={handleChange}
+              errors={errors.name}
+            />
+          </MotionWrapper>
+          <MotionWrapper variants={slideLeft}>
+            <InputField
+              label="Phone Number"
+              type="text"
+              name="phone"
+              placeholder="Phone number"
+              value={formData.phone}
+              onChange={handleChange}
+              errors={errors.phone}
+            />
+          </MotionWrapper>
+          <MotionWrapper variants={slideRight}>
+            <div className="w-full text-sm">
+              <p className="mb-1">Relationship</p>
+              <select
+                name="relationship"
+                value={formData.relationship}
+                onChange={handleChange}
+                className="border p-2 rounded w-full"
+              >
+                <option value="">Relationship</option>
+                {relationshipOptions.map((r) => (
+                  <option key={r}>{r}</option>
+                ))}
+              </select>
+            </div>
+          </MotionWrapper>
+          <MotionWrapper variants={slideLeft}>
+            <Button type="submit" label="Save Contact">
+              <FaCheck />
+            </Button>
+          </MotionWrapper>
+          <MotionWrapper variants={slideRight}>
+            <Button
+              onClick={handleResetForm}
+              variant="outline"
+              type="reset"
+              label="Cancel"
+            >
+              <MdCancel />
+            </Button>
+          </MotionWrapper>
         </form>
       )}
     </div>
