@@ -7,6 +7,18 @@ import {
 } from "./validation/reminder.validation";
 import { InputField } from "../../components/InputFiled";
 import { IoArrowBack } from "react-icons/io5";
+import { FaPlusCircle } from "react-icons/fa";
+import { MdDeleteOutline } from "react-icons/md";
+import { MdOutlineEdit } from "react-icons/md";
+import { IoIosNotificationsOutline } from "react-icons/io";
+import { FaCheck } from "react-icons/fa";
+import { MdCancel } from "react-icons/md";
+import MotionWrapper from "../../components/animation/MotionWrapper";
+import {
+  combo,
+  slideLeft,
+  slideRight,
+} from "../../components/animation/Variants";
 
 const mockContacts = [
   { id: 1, name: "Contact 1" },
@@ -125,132 +137,158 @@ const Reminder = () => {
     <div className="p-6 w-full flex flex-col gap-4">
       {!showForm ? (
         <>
-          <p className="text-xl font-bold py-4">Reminders</p>
+          <div className="flex items-center gap-2">
+            <IoIosNotificationsOutline className="h-8 w-8" />
+            <p className="text-xl font-bold py-4">Reminders</p>
+          </div>
           <div className="flex justify-between">
-            <InputField
-              placeholder="Search reminder"
-              onChange={(e) => setSearchValue(e.target.value)}
-            />
-            <Button label="Add Reminder" onClick={handleAdd} />
+            <MotionWrapper variants={slideLeft}>
+              <InputField
+                placeholder="Search reminder"
+                onChange={(e) => setSearchValue(e.target.value)}
+              />
+            </MotionWrapper>
+            <MotionWrapper variants={slideRight}>
+              <Button label="Add Reminder" onClick={handleAdd}>
+                <FaPlusCircle />
+              </Button>
+            </MotionWrapper>
           </div>
 
           <div className="border border-gray-200 rounded-md overflow-hidden">
-            <div className="flex px-4 py-2 bg-gray-100 font-bold">
+            <div className="flex px-4 py-2 bg-gray-100 font-bold w-full">
               <span className="w-1/5">Contact</span>
               <span className="w-1/5">Reminder</span>
               <span className="w-1/5">Date</span>
               <span className="w-1/5">Time</span>
-              <span className="w-1/5 text-center">Actions</span>
+              <span className="w-1/5">Actions</span>
             </div>
 
             {filteredData.map((reminder) => (
               <div key={reminder.id}>
-                <div className="flex px-4 py-2">
-                  <span className="w-1/5">
-                    {getContactName(reminder.contactId)}
-                  </span>
-                  <span className="w-1/5">{reminder.title}</span>
-                  <span className="w-1/5">{reminder.date}</span>
-                  <span className="w-1/5">{reminder.time}</span>
-                  <span className="w-1/5 text-center flex items-center gap-2 justify-center">
-                    <Button label="Edit" onClick={() => handleEdit(reminder)} />
-                    <Button
-                      variant="secondary"
-                      label="Delete"
-                      onClick={() => handleDelete(reminder.id)}
-                    />
-                  </span>
-                </div>
+                <MotionWrapper variants={combo}>
+                  <div className="flex px-4 py-2 w-full">
+                    <span className="w-1/5">
+                      {getContactName(reminder.contactId)}
+                    </span>
+                    <span className="w-1/5">{reminder.title}</span>
+                    <span className="w-1/5">{reminder.date}</span>
+                    <span className="w-1/5">{reminder.time}</span>
+                    <MotionWrapper variants={slideLeft}>
+                      <span className="w-1/5 text-center flex items-center gap-2 justify-center">
+                        <Button
+                          label="Edit"
+                          onClick={() => handleEdit(reminder)}
+                        >
+                          <MdOutlineEdit />
+                        </Button>
+                        <Button
+                          variant="secondary"
+                          label="Delete"
+                          onClick={() => handleDelete(reminder.id)}
+                        >
+                          <MdDeleteOutline />
+                        </Button>
+                      </span>
+                    </MotionWrapper>
+                  </div>
+                </MotionWrapper>
                 <hr className="mx-4 border-gray-300" />
               </div>
             ))}
           </div>
         </>
       ) : (
-        <form
-          className="flex flex-col gap-4 border border-gray-200 rounded-md p-4"
-          onSubmit={handleSubmit}
-        >
-          <div>
-            <button
-              onClick={() => setShowForm(false)}
-              className="flex items-center gap-2 cursor-pointer"
+        <MotionWrapper variants={combo}>
+          <form
+            className="flex flex-col gap-4 border border-gray-200 rounded-md p-4"
+            onSubmit={handleSubmit}
+          >
+            <div>
+              <button
+                onClick={() => setShowForm(false)}
+                className="flex items-center gap-2 cursor-pointer"
+              >
+                <IoArrowBack /> Go Back
+              </button>
+            </div>
+            <h2 className="font-bold text-lg">
+              {editingReminder ? "Edit Reminder" : "Add Reminder"}
+            </h2>
+
+            <select
+              name="contactId"
+              value={formData.contactId}
+              onChange={handleChange}
+              className="border p-2 rounded"
             >
-              <IoArrowBack /> Go Back
-            </button>
-          </div>
-          <h2 className="font-bold text-lg">
-            {editingReminder ? "Edit Reminder" : "Add Reminder"}
-          </h2>
+              <option value={0}>Select Contact</option>
+              {mockContacts.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.name}
+                </option>
+              ))}
+            </select>
+            {errors.contactId && (
+              <p className="text-red-500">{errors.contactId[0]}</p>
+            )}
 
-          <select
-            name="contactId"
-            value={formData.contactId}
-            onChange={handleChange}
-            className="border p-2 rounded"
-          >
-            <option value={0}>Select Contact</option>
-            {mockContacts.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.name}
-              </option>
-            ))}
-          </select>
-          {errors.contactId && (
-            <p className="text-red-500">{errors.contactId[0]}</p>
-          )}
-
-          <InputField
-            label="Reminder Title"
-            name="title"
-            value={formData.title}
-            onChange={handleChange}
-            errors={errors.title}
-          />
-
-          <InputField
-            label="Date"
-            type="date"
-            name="date"
-            value={formData.date}
-            onChange={handleChange}
-            errors={errors.date}
-          />
-
-          <InputField
-            label="Time"
-            type="time"
-            name="time"
-            value={formData.time}
-            onChange={handleChange}
-            errors={errors.time}
-          />
-
-          <select
-            name="type"
-            value={formData.type}
-            onChange={handleChange}
-            className="border p-2 rounded"
-          >
-            <option value="">Select type</option>
-            {reminderTypes.map((type) => (
-              <option key={type} value={type}>
-                {type}
-              </option>
-            ))}
-          </select>
-          {errors.type && <p className="text-red-500">{errors.type[0]}</p>}
-
-          <div className="flex flex-col w-full gap-2">
-            <Button type="submit" label="Save" />
-            <Button
-              type="button"
-              label="Cancel"
-              variant="outline"
-              onClick={() => setShowForm(false)}
+            <InputField
+              label="Reminder Title"
+              name="title"
+              value={formData.title}
+              onChange={handleChange}
+              errors={errors.title}
             />
-          </div>
-        </form>
+
+            <InputField
+              label="Date"
+              type="date"
+              name="date"
+              value={formData.date}
+              onChange={handleChange}
+              errors={errors.date}
+            />
+
+            <InputField
+              label="Time"
+              type="time"
+              name="time"
+              value={formData.time}
+              onChange={handleChange}
+              errors={errors.time}
+            />
+
+            <select
+              name="type"
+              value={formData.type}
+              onChange={handleChange}
+              className="border p-2 rounded"
+            >
+              <option value="">Select type</option>
+              {reminderTypes.map((type) => (
+                <option key={type} value={type}>
+                  {type}
+                </option>
+              ))}
+            </select>
+            {errors.type && <p className="text-red-500">{errors.type[0]}</p>}
+
+            <div className="flex flex-col w-full gap-2">
+              <Button type="submit" label="Save">
+                <FaCheck />
+              </Button>
+              <Button
+                type="button"
+                label="Cancel"
+                variant="outline"
+                onClick={() => setShowForm(false)}
+              >
+                <MdCancel />
+              </Button>
+            </div>
+          </form>
+        </MotionWrapper>
       )}
     </div>
   );
