@@ -2,8 +2,21 @@ import React, { useState } from "react";
 import z from "zod";
 import { Button } from "../../components/Button";
 import { IoArrowBack } from "react-icons/io5";
+import { FaPlusCircle } from "react-icons/fa";
+import { MdDeleteOutline } from "react-icons/md";
+import { MdOutlineEdit } from "react-icons/md";
+import { FaCheck } from "react-icons/fa";
+import { MdCancel } from "react-icons/md";
+import { MdOutlineNote } from "react-icons/md";
 import { NoteSchema, type NoteType } from "./validation/notes.validation";
 import { InputField } from "../../components/InputFiled";
+import MotionWrapper from "../../components/animation/MotionWrapper";
+import {
+  blurIn,
+  combo,
+  rotateIn,
+  scaleIn,
+} from "../../components/animation/Variants";
 
 const mockContacts = [
   { id: 1, name: "Contact 1" },
@@ -134,13 +147,22 @@ const Notes = () => {
     <div className="p-6 w-full flex flex-col gap-4">
       {!showForm ? (
         <>
-          <h2 className="text-lg font-bold py-4">Notes</h2>
+          <div className="flex items-center gap-2">
+            <MdOutlineNote className="h-8 w-8" />
+            <h2 className="text-lg font-bold py-4">Notes</h2>
+          </div>
           <div className="flex justify-between items-center">
-            <InputField
-              placeholder="Search notes"
-              onChange={(e) => setSearchValue(e.target.value)}
-            />
-            <Button label="Add Note" onClick={handleAddNote} />
+            <MotionWrapper variants={scaleIn}>
+              <InputField
+                placeholder="Search notes"
+                onChange={(e) => setSearchValue(e.target.value)}
+              />
+            </MotionWrapper>
+            <MotionWrapper variants={blurIn}>
+              <Button label="Add Note" onClick={handleAddNote}>
+                <FaPlusCircle />
+              </Button>
+            </MotionWrapper>
           </div>
 
           <div className="border border-gray-200 rounded-md overflow-hidden">
@@ -152,18 +174,24 @@ const Notes = () => {
 
             {filteredNotes.map((note) => (
               <div key={note.id}>
-                <div className="flex px-4 py-2 items-center">
-                  <span className="w-1/4">{note.contactName}</span>
-                  <span className="w-1/2">{note.description}</span>
-                  <span className="w-1/4 flex justify-center gap-2">
-                    <Button label="Edit" onClick={() => handleEdit(note)} />
-                    <Button
-                      label="Delete"
-                      variant="secondary"
-                      onClick={() => handleDelete(note.id)}
-                    />
-                  </span>
-                </div>
+                <MotionWrapper variants={rotateIn}>
+                  <div className="flex px-4 py-2 items-center">
+                    <span className="w-1/4">{note.contactName}</span>
+                    <span className="w-1/2">{note.description}</span>
+                    <span className="w-1/4 flex justify-center gap-2">
+                      <Button label="Edit" onClick={() => handleEdit(note)}>
+                        <MdOutlineEdit />
+                      </Button>
+                      <Button
+                        label="Delete"
+                        variant="secondary"
+                        onClick={() => handleDelete(note.id)}
+                      >
+                        <MdDeleteOutline />
+                      </Button>
+                    </span>
+                  </div>
+                </MotionWrapper>
                 <hr className="border-gray-300 mx-4" />
               </div>
             ))}
@@ -174,66 +202,72 @@ const Notes = () => {
           </div>
         </>
       ) : (
-        <form
-          onSubmit={handleSubmit}
-          className="flex flex-col gap-4 border border-gray-200 rounded-md p-4"
-        >
-          <button
-            type="button"
-            className="flex items-center gap-2 cursor-pointer"
-            onClick={() => setShowForm(false)}
+        <MotionWrapper variants={combo}>
+          <form
+            onSubmit={handleSubmit}
+            className="flex flex-col gap-4 border border-gray-200 rounded-md p-4"
           >
-            <IoArrowBack /> Go Back
-          </button>
-
-          <h2 className="text-lg font-bold">
-            {editingNote ? "Edit Note" : "Add Note"}
-          </h2>
-
-          <div className="flex flex-col gap-1">
-            <label className="text-sm">Select Contact</label>
-            <select
-              name="contactId"
-              value={formData.contactId}
-              onChange={handleChange}
-              className="border p-2 rounded"
+            <button
+              type="button"
+              className="flex items-center gap-2 cursor-pointer"
+              onClick={() => setShowForm(false)}
             >
-              <option value={0}>Select Contact</option>
-              {mockContacts.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.name}
-                </option>
-              ))}
-            </select>
-            {errors.contactId && (
-              <p className="text-red-500 text-sm">{errors.contactId[0]}</p>
-            )}
-          </div>
+              <IoArrowBack /> Go Back
+            </button>
 
-          <div className="flex flex-col gap-1">
-            <label className="text-sm">Description</label>
-            <textarea
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-              className="border p-2 rounded h-24 resize-none"
-            />
-            {errors.description && (
-              <p className="text-red-500 text-sm">{errors.description[0]}</p>
-            )}
-          </div>
+            <h2 className="text-lg font-bold">
+              {editingNote ? "Edit Note" : "Add Note"}
+            </h2>
 
-          <Button
-            type="submit"
-            label={editingNote ? "Update Note" : "Save Note"}
-          />
-          <Button
-            variant="outline"
-            onClick={handleResetForm}
-            type="reset"
-            label="Cancel"
-          />
-        </form>
+            <div className="flex flex-col gap-1">
+              <label className="text-sm">Select Contact</label>
+              <select
+                name="contactId"
+                value={formData.contactId}
+                onChange={handleChange}
+                className="border p-2 rounded"
+              >
+                <option value={0}>Select Contact</option>
+                {mockContacts.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
+              {errors.contactId && (
+                <p className="text-red-500 text-sm">{errors.contactId[0]}</p>
+              )}
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <label className="text-sm">Description</label>
+              <textarea
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                className="border p-2 rounded h-24 resize-none"
+              />
+              {errors.description && (
+                <p className="text-red-500 text-sm">{errors.description[0]}</p>
+              )}
+            </div>
+
+            <Button
+              type="submit"
+              label={editingNote ? "Update Note" : "Save Note"}
+            >
+              <FaCheck />
+            </Button>
+            <Button
+              variant="outline"
+              onClick={handleResetForm}
+              type="reset"
+              label="Cancel"
+            >
+              <MdCancel />
+            </Button>
+          </form>
+        </MotionWrapper>
       )}
     </div>
   );
