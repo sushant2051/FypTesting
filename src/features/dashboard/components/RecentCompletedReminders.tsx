@@ -1,3 +1,4 @@
+import { MdOutlineRecentActors } from "react-icons/md";
 const completedReminders = [
   {
     id: 1,
@@ -22,7 +23,10 @@ const completedReminders = [
 const RecentCompletedReminders = () => {
   return (
     <div className="border border-gray-200 rounded-md p-4">
-      <p className="font-bold text-lg mb-4">Recently Completed Reminders</p>
+      <div className="flex items-center gap-2 mb-4">
+        <MdOutlineRecentActors className="h-6 w-6" />
+        <p className="font-bold text-lg">Recently Completed Reminders</p>
+      </div>
 
       <div className="flex flex-col">
         {completedReminders.map((reminder) => (

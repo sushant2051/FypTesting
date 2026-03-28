@@ -20,12 +20,12 @@ const Button: React.FC<ButtonProps> = ({
   type = "button",
   children,
 }) => {
-  const content = label || children;
   return (
     <button
       onClick={onClick}
       type={type}
       className={`
+        flex items-center gap-2
         cursor-pointer
         px-4 py-2
         rounded-md
@@ -33,7 +33,8 @@ const Button: React.FC<ButtonProps> = ({
         ${variantClasses[variant]}
       `}
     >
-      {content}
+      {label && <span>{label}</span>}
+      {children}
     </button>
   );
 };

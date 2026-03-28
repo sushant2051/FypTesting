@@ -1,3 +1,5 @@
+import { MdOutlineUpcoming } from "react-icons/md";
+import { IoMdContact } from "react-icons/io";
 import {
   BarChart,
   Bar,
@@ -28,7 +30,10 @@ const Charts = () => {
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {/* Upcoming Reminders */}
       <div className="border border-gray-200 rounded-md p-4">
-        <p className="font-bold mb-4">Upcoming Reminders</p>
+        <div className="flex items-center gap-2 mb-4">
+          <MdOutlineUpcoming className="w-6 h-6" />
+          <p className="font-bold">Upcoming Reminders</p>
+        </div>
         <ResponsiveContainer width="100%" height={250}>
           <BarChart data={reminderStats}>
             <CartesianGrid strokeDasharray="3 3" />
@@ -46,7 +51,10 @@ const Charts = () => {
 
       {/* New Contacts */}
       <div className="border border-gray-200 rounded-md p-4">
-        <p className="font-bold mb-4">New Contacts</p>
+        <div className="flex items-center gap-2 mb-4">
+          <IoMdContact className="w-6 h-6" />
+          <p className="font-bold">New Contacts</p>
+        </div>
         <ResponsiveContainer width="100%" height={250}>
           <BarChart data={contactStats}>
             <CartesianGrid strokeDasharray="3 3" />

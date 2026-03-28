@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router";
 import { Button } from "../../components/Button";
+import { MdLogout } from "react-icons/md";
 
 const Logout = () => {
   const navigate = useNavigate();
@@ -7,7 +8,12 @@ const Logout = () => {
     console.log("user is log out");
     navigate("");
   };
-  return <Button variant="secondary" label="Logout" onClick={handleLogout} />;
+  return (
+    <Button variant="secondary" label="Logout" onClick={handleLogout}>
+      {" "}
+      <MdLogout />
+    </Button>
+  );
 };
 
 export default Logout;

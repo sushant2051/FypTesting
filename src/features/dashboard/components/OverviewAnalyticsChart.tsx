@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { GrOverview } from "react-icons/gr";
 import {
   BarChart,
   Bar,
@@ -89,7 +90,10 @@ const OverviewAnalyticsChart = () => {
   return (
     <div className="border border-gray-200 rounded-md p-4 w-full">
       <div className="flex justify-between items-center mb-4">
-        <p className="font-bold text-lg">Overview Analytics</p>
+        <div className="flex items-center gap-2">
+          <GrOverview className="w-6 h-6" />
+          <p className="font-bold text-lg">Overview Analytics</p>
+        </div>
         <div className="flex gap-2">
           {[
             { label: "7D", value: "week" },
