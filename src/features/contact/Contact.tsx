@@ -7,6 +7,23 @@ import {
   ContactSchema,
   type ContactType,
 } from "./validation/contact.validation";
+import { FaPerson } from "react-icons/fa6";
+import { FaUserGroup } from "react-icons/fa6";
+import { MdOutlinePersonAdd } from "react-icons/md";
+import { MdDeleteOutline } from "react-icons/md";
+import { MdOutlineEdit } from "react-icons/md";
+import MotionWrapper from "../../components/animation/MotionWrapper";
+import { FaCheck } from "react-icons/fa";
+import { MdOutlineCreateNewFolder } from "react-icons/md";
+import {
+  blurIn,
+  combo,
+  fadeUp,
+  rotateIn,
+  scaleIn,
+  slideLeft,
+  slideRight,
+} from "../../components/animation/Variants";
 
 type GroupType = {
   id: number;
@@ -159,183 +176,230 @@ const Contact = () => {
   return (
     <div className="p-6 w-full flex flex-col gap-4">
       <div className="flex gap-2">
-        <Button
-          label="Individual"
-          variant={activeTab === "INDIVIDUAL" ? "primary" : "outline"}
-          onClick={() => setActiveTab("INDIVIDUAL")}
-        />
-        <Button
-          label="Group"
-          variant={activeTab === "GROUP" ? "primary" : "outline"}
-          onClick={() => setActiveTab("GROUP")}
-        />
+        <MotionWrapper variants={slideLeft}>
+          <Button
+            label="Individual"
+            variant={activeTab === "INDIVIDUAL" ? "primary" : "outline"}
+            onClick={() => setActiveTab("INDIVIDUAL")}
+          >
+            <FaPerson />
+          </Button>
+        </MotionWrapper>
+        <MotionWrapper variants={slideRight}>
+          <Button
+            label="Group"
+            variant={activeTab === "GROUP" ? "primary" : "outline"}
+            onClick={() => setActiveTab("GROUP")}
+          >
+            <FaUserGroup />
+          </Button>
+        </MotionWrapper>
       </div>
       {activeTab === "INDIVIDUAL" && !showForm && (
         <>
           <div className="flex justify-between">
-            <InputField
-              placeholder="Search contacts"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            <Button label="Add Contact" onClick={handleAddContact} />
+            <MotionWrapper variants={slideRight}>
+              <InputField
+                placeholder="Search contacts"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </MotionWrapper>
+            <MotionWrapper variants={slideLeft}>
+              <Button label="Add Contact" onClick={handleAddContact}>
+                <MdOutlinePersonAdd />
+              </Button>
+            </MotionWrapper>
           </div>
-
-          <div className="border rounded-md">
-            {filteredContacts.map((c) => (
-              <div key={c.id} className="flex px-4 py-2 justify-between">
-                <span>{c.name}</span>
-                <span className="flex gap-2">
-                  <Button label="Edit" onClick={() => handleEdit(c)} />
-                  <Button
-                    label="Delete"
-                    variant="secondary"
-                    onClick={() => handleDelete(c.id)}
-                  />
-                </span>
-              </div>
-            ))}
-          </div>
+          <MotionWrapper variants={fadeUp}>
+            <div className="border rounded-md">
+              {filteredContacts.map((c) => (
+                <div key={c.id} className="flex px-4 py-2 justify-between">
+                  <span>{c.name}</span>
+                  <span className="flex gap-2">
+                    <Button label="Edit" onClick={() => handleEdit(c)}>
+                      <MdOutlineEdit />
+                    </Button>
+                    <Button
+                      label="Delete"
+                      variant="secondary"
+                      onClick={() => handleDelete(c.id)}
+                    >
+                      <MdDeleteOutline />
+                    </Button>
+                  </span>
+                </div>
+              ))}
+            </div>
+          </MotionWrapper>
         </>
       )}
 
       {activeTab === "INDIVIDUAL" && showForm && (
-        <form
-          className="border p-4 flex flex-col gap-2"
-          onSubmit={handleSubmit}
-        >
-          <button
-            type="button"
-            onClick={() => setShowForm(false)}
-            className="flex items-center gap-2"
+        <MotionWrapper variants={combo}>
+          <form
+            className="border p-4 flex flex-col gap-2"
+            onSubmit={handleSubmit}
           >
-            <IoArrowBack /> Go Back
-          </button>
+            <MotionWrapper variants={scaleIn}>
+              <button
+                type="button"
+                onClick={() => setShowForm(false)}
+                className="flex items-center gap-2"
+              >
+                <IoArrowBack /> Go Back
+              </button>
+            </MotionWrapper>
 
-          <InputField
-            name="name"
-            label="Name"
-            value={formData.name}
-            onChange={handleChange}
-            errors={errors.name}
-          />
-          <InputField
-            name="phone"
-            label="Phone"
-            value={formData.phone}
-            onChange={handleChange}
-            errors={errors.phone}
-          />
-          <InputField
-            name="email"
-            label="Email"
-            value={formData.email}
-            onChange={handleChange}
-            errors={errors.email}
-          />
+            <InputField
+              name="name"
+              label="Name"
+              value={formData.name}
+              onChange={handleChange}
+              errors={errors.name}
+            />
+            <InputField
+              name="phone"
+              label="Phone"
+              value={formData.phone}
+              onChange={handleChange}
+              errors={errors.phone}
+            />
+            <InputField
+              name="email"
+              label="Email"
+              value={formData.email}
+              onChange={handleChange}
+              errors={errors.email}
+            />
 
-          <select
-            name="relationship"
-            value={formData.relationship}
-            onChange={handleChange}
-            className="border p-2 rounded"
-          >
-            <option value="">Relationship</option>
-            {relationshipOptions.map((r) => (
-              <option key={r}>{r}</option>
-            ))}
-          </select>
+            <select
+              name="relationship"
+              value={formData.relationship}
+              onChange={handleChange}
+              className="border p-2 rounded"
+            >
+              <option value="">Relationship</option>
+              {relationshipOptions.map((r) => (
+                <option key={r}>{r}</option>
+              ))}
+            </select>
 
-          <textarea
-            name="note"
-            value={formData.note}
-            onChange={handleChange}
-            className="border p-2 rounded"
-          />
-
-          <Button type="submit" label="Save Contact" />
-        </form>
+            <textarea
+              name="note"
+              value={formData.note}
+              onChange={handleChange}
+              className="border p-2 rounded"
+            />
+            <MotionWrapper variants={rotateIn}>
+              <Button type="submit" label="Save Contact">
+                <FaCheck />
+              </Button>
+            </MotionWrapper>
+          </form>
+        </MotionWrapper>
       )}
 
       {activeTab === "GROUP" && !showGroupForm && (
         <>
-          <Button label="Create Group" onClick={() => setShowGroupForm(true)} />
+          <MotionWrapper variants={scaleIn}>
+            <Button label="Create Group" onClick={() => setShowGroupForm(true)}>
+              <MdOutlineCreateNewFolder />
+            </Button>
+          </MotionWrapper>
+          <MotionWrapper variants={combo}>
+            <div className="border rounded-md">
+              {groups.map((group) => (
+                <div
+                  key={group.id}
+                  onClick={() => setSelectedGroup(group)}
+                  className="p-4 cursor-pointer border-b"
+                >
+                  <p className="font-bold">{group.name}</p>
+                  <p className="text-sm text-gray-500">
+                    {group.members.map((m) => m.name).join(", ")}
+                  </p>
+                </div>
+              ))}
 
-          <div className="border rounded-md">
-            {groups.map((group) => (
-              <div
-                key={group.id}
-                onClick={() => setSelectedGroup(group)}
-                className="p-4 cursor-pointer border-b"
-              >
-                <p className="font-bold">{group.name}</p>
-                <p className="text-sm text-gray-500">
-                  {group.members.map((m) => m.name).join(", ")}
-                </p>
-              </div>
-            ))}
-
-            {groups.length === 0 && (
-              <p className="p-4 text-gray-500">No groups created</p>
-            )}
-          </div>
+              {groups.length === 0 && (
+                <p className="p-4 text-gray-500">No groups created</p>
+              )}
+            </div>
+          </MotionWrapper>
         </>
       )}
 
       {activeTab === "GROUP" && showGroupForm && (
         <div className="border p-4 flex flex-col gap-4">
-          <button
-            type="button"
-            onClick={() => setShowGroupForm(false)}
-            className="flex items-center gap-2"
-          >
-            <IoArrowBack /> Go Back
-          </button>
-
-          <InputField
-            label="Group Name"
-            value={groupName}
-            onChange={(e) => setGroupName(e.target.value)}
-            errors={errors.groupName}
-          />
-
+          <MotionWrapper variants={scaleIn}>
+            <button
+              type="button"
+              onClick={() => setShowGroupForm(false)}
+              className="flex items-center gap-2"
+            >
+              <IoArrowBack /> Go Back
+            </button>
+          </MotionWrapper>
+          <MotionWrapper variants={slideLeft}>
+            <InputField
+              label="Group Name"
+              value={groupName}
+              onChange={(e) => setGroupName(e.target.value)}
+              errors={errors.groupName}
+            />
+          </MotionWrapper>
           {contacts.map((c) => (
             <label key={c.id} className="flex gap-2">
-              <input
-                type="checkbox"
-                checked={selectedContacts.includes(c.id)}
-                onChange={() => toggleContactSelection(c.id)}
-              />
-              {c.name}
+              <MotionWrapper variants={slideRight}>
+                <input
+                  type="checkbox"
+                  checked={selectedContacts.includes(c.id)}
+                  onChange={() => toggleContactSelection(c.id)}
+                />
+              </MotionWrapper>
+              <MotionWrapper variants={slideLeft}>
+                <p>{c.name}</p>
+              </MotionWrapper>
             </label>
           ))}
-
-          <Button label="Save Group" onClick={handleCreateGroup} />
+          <MotionWrapper variants={blurIn}>
+            <Button label="Save Group" onClick={handleCreateGroup}>
+              <FaCheck />
+            </Button>
+          </MotionWrapper>
         </div>
       )}
       {selectedGroup && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-          <div className="bg-white w-full max-w-md rounded-md p-4">
-            <div className="flex justify-between items-center mb-3">
-              <h2 className="font-bold text-lg">{selectedGroup.name}</h2>
-              <button
-                className="cursor-pointer"
-                onClick={() => setSelectedGroup(null)}
-              >
-                ✕
-              </button>
-            </div>
+        <MotionWrapper variants={combo}>
+          <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+            <div className="bg-white w-full max-w-md rounded-md p-4">
+              <div className="flex justify-between items-center mb-3">
+                <h2 className="font-bold text-lg">{selectedGroup.name}</h2>
+                <MotionWrapper variants={rotateIn}>
+                  <button
+                    className="cursor-pointer"
+                    onClick={() => setSelectedGroup(null)}
+                  >
+                    ✕
+                  </button>
+                </MotionWrapper>
+              </div>
 
-            <div className="flex flex-col gap-2">
-              {selectedGroup.members.map((m) => (
-                <div key={m.id} className="flex justify-between border-b pb-1">
-                  <span>{m.name}</span>
-                  <span>{m.phone}</span>
-                </div>
-              ))}
+              <div className="flex flex-col gap-2">
+                {selectedGroup.members.map((m) => (
+                  <div
+                    key={m.id}
+                    className="flex justify-between border-b pb-1"
+                  >
+                    <span>{m.name}</span>
+                    <span>{m.phone}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
+        </MotionWrapper>
       )}
     </div>
   );
