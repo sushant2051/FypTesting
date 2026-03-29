@@ -1,5 +1,13 @@
 import { useState } from "react";
 import { InputField } from "../components/InputFiled";
+import { LuLogs } from "react-icons/lu";
+import MotionWrapper from "../components/animation/MotionWrapper";
+import {
+  blurIn,
+  fadeDown,
+  fadeUp,
+  slideLeft,
+} from "../components/animation/Variants";
 
 const LogsData = [
   { id: 1, reminder: "Sample logs 1", date: "2026-5-10" },
@@ -23,15 +31,20 @@ const LogsPage = () => {
     data.reminder.toLowerCase().includes(searchValue.toLowerCase()),
   );
   return (
-    <div className="p-6 w-full flex flex-col gap-4">
-      <InputField
-        placeholder="Search logs"
-        value={searchValue}
-        onChange={(e) => setSearchValue(e.target.value)}
-      />
+    <div className="p-6 border border-gray-200 rounded-md m-4 flex flex-col gap-4">
+      <MotionWrapper variants={slideLeft}>
+        <InputField
+          placeholder="Search logs"
+          value={searchValue}
+          onChange={(e) => setSearchValue(e.target.value)}
+        />
+      </MotionWrapper>
       <div className="border border-gray-200 rounded-md overflow-hidden">
         <div className="flex justify-between bg-gray-100 px-4 py-2 border-b border-gray-300 font-bold">
-          <span>Logs</span>
+          <div className="flex items-center gap-2">
+            <LuLogs className="h-6 w-6" />
+            <span>Logs</span>
+          </div>
           <span></span>
         </div>
         <div className="flex flex-col">
@@ -40,16 +53,22 @@ const LogsPage = () => {
               key={item.id}
               className="flex justify-between px-4 py-2 border-b border-gray-300 last:border-b-0"
             >
-              <p className="text-left">{item.reminder}</p>
-              <p className="text-right">{item.date}</p>
+              <MotionWrapper variants={fadeDown}>
+                <p className="text-left">{item.reminder}</p>
+              </MotionWrapper>
+              <MotionWrapper variants={fadeUp}>
+                <p className="text-right">{item.date}</p>
+              </MotionWrapper>
             </div>
           ))}
         </div>
-        {filterData.length < 1 && (
-          <p className="mt-2 flex justify-center items-center">
-            No items found on log history
-          </p>
-        )}
+        <MotionWrapper variants={blurIn}>
+          {filterData.length < 1 && (
+            <p className="mt-2 flex justify-center items-center">
+              No items found on log history
+            </p>
+          )}
+        </MotionWrapper>
       </div>
     </div>
   );

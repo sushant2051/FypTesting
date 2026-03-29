@@ -28,7 +28,7 @@ const Dashboard = () => {
     navigate("/logs");
   };
   return (
-    <div className="p-6 w-full flex flex-col gap-4">
+    <div className="p-6 flex flex-col gap-4 border border-gray-200 rounded-md m-4 sm:m-6">
       <div className="py-6 flex items-center gap-2">
         <RiAdminLine className="h-8 w-8" />
         <p className="text-2xl fond-bold ">Admin Dashboard</p>
