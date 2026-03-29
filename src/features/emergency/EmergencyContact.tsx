@@ -1,4 +1,4 @@
-import { IoCall, IoArrowBack } from "react-icons/io5";
+import { IoCall, IoArrowBack, IoAddCircle } from "react-icons/io5";
 import { Button } from "../../components/Button";
 import { useState } from "react";
 import z from "zod";
@@ -18,7 +18,7 @@ import {
   slideRight,
 } from "../../components/animation/Variants";
 import { FaCheck } from "react-icons/fa";
-import { MdCancel } from "react-icons/md";
+import { MdCancel, MdEmergency } from "react-icons/md";
 
 type Contact = {
   id: number;
@@ -100,9 +100,16 @@ const EmergencyContact = () => {
   };
 
   return (
-    <div className="py-6 flex flex-col gap-4 w-full">
+    <div>
       {!showForm ? (
-        <>
+        <div className="py-6 flex flex-col gap-4 border p-4 border-gray-200 rounded-md sm:m-6 m-3">
+          <MotionWrapper
+            variants={rotateIn}
+            className="flex items-center gap-2 py-2"
+          >
+            <MdEmergency className="h-8 w-8" />
+            <h2 className="text-lg font-bold">Emergency Contacts</h2>
+          </MotionWrapper>
           <MotionWrapper variants={scaleIn}>
             <div>
               <Button
@@ -114,7 +121,7 @@ const EmergencyContact = () => {
             </div>
           </MotionWrapper>
           <div className="border border-gray-200 rounded-md p-4 w-full">
-            {contacts.map((contact) => (
+            {contacts.map((contact, index) => (
               <div key={contact.id}>
                 <div className="flex items-center justify-between py-2">
                   <MotionWrapper variants={slideRight}>
@@ -135,7 +142,9 @@ const EmergencyContact = () => {
                     </div>
                   </MotionWrapper>
                 </div>
-                <hr className="border-gray-300" />
+                {index < contacts.length - 1 && (
+                  <hr className="border-gray-300" />
+                )}
               </div>
             ))}
             <MotionWrapper variants={blurIn}>
@@ -146,7 +155,7 @@ const EmergencyContact = () => {
               )}
             </MotionWrapper>
           </div>
-        </>
+        </div>
       ) : (
         <form
           className="flex flex-col gap-3 border border-gray-200 rounded-md p-4"
@@ -155,13 +164,17 @@ const EmergencyContact = () => {
           <MotionWrapper variants={scaleIn}>
             <button
               type="button"
-              className="flex items-center gap-2 mb-2 cursor-pointer"
+              className="flex items-center gap-2 mb-2 cursor-pointer hover:bg-gray-300 rounded p-2"
               onClick={handleBack}
             >
               <IoArrowBack /> Go Back
             </button>
           </MotionWrapper>
-          <MotionWrapper variants={rotateIn}>
+          <MotionWrapper
+            variants={rotateIn}
+            className="flex items-center gap-2"
+          >
+            <IoAddCircle className="h-6 w-6" />
             <h2 className="text-lg font-bold">Add Emergency Contact</h2>{" "}
           </MotionWrapper>
           <MotionWrapper variants={slideLeft}>
@@ -202,21 +215,19 @@ const EmergencyContact = () => {
               </select>
             </div>
           </MotionWrapper>
-          <MotionWrapper variants={slideLeft}>
-            <Button type="submit" label="Save Contact">
-              <FaCheck />
-            </Button>
-          </MotionWrapper>
-          <MotionWrapper variants={slideRight}>
-            <Button
-              onClick={handleResetForm}
-              variant="outline"
-              type="reset"
-              label="Cancel"
-            >
-              <MdCancel />
-            </Button>
-          </MotionWrapper>
+
+          <Button type="submit" label="Save Contact">
+            <FaCheck />
+          </Button>
+
+          <Button
+            onClick={handleResetForm}
+            variant="outline"
+            type="reset"
+            label="Cancel"
+          >
+            <MdCancel />
+          </Button>
         </form>
       )}
     </div>

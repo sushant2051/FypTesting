@@ -8,6 +8,8 @@ import {
   fadeUp,
   slideLeft,
 } from "../components/animation/Variants";
+import { useNavigate } from "react-router";
+import { IoArrowBack } from "react-icons/io5";
 
 const LogsData = [
   { id: 1, reminder: "Sample logs 1", date: "2026-5-10" },
@@ -26,12 +28,25 @@ const LogsData = [
 
 const LogsPage = () => {
   const [searchValue, setSearchValue] = useState("");
+  const navigate = useNavigate();
 
   const filterData = LogsData.filter((data) =>
     data.reminder.toLowerCase().includes(searchValue.toLowerCase()),
   );
+  const handleGoBack = () => {
+    navigate("/");
+  };
   return (
-    <div className="p-6 border border-gray-200 rounded-md m-4 flex flex-col gap-4">
+    <div className="p-6 border border-gray-200 rounded-md sm:m-6 m-3 flex flex-col gap-4">
+      <div className="py-4">
+        <button
+          onClick={handleGoBack}
+          className="cursor-pointer hover:bg-gray-300 flex items-center gap-2 rounded p-2"
+        >
+          {" "}
+          <IoArrowBack /> Go Back
+        </button>
+      </div>
       <MotionWrapper variants={slideLeft}>
         <InputField
           placeholder="Search logs"

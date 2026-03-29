@@ -134,7 +134,7 @@ const Reminder = () => {
   );
 
   return (
-    <div className="p-6 w-full flex flex-col gap-4">
+    <div className="p-6 border border-gray-200 rounded-md sm:m-6 m-3 flex flex-col gap-4">
       {!showForm ? (
         <>
           <div className="flex items-center gap-2">
@@ -207,7 +207,7 @@ const Reminder = () => {
             <div>
               <button
                 onClick={() => setShowForm(false)}
-                className="flex items-center gap-2 cursor-pointer"
+                className="flex items-center gap-2 cursor-pointer hover:bg-gray-300 rounded p-2"
               >
                 <IoArrowBack /> Go Back
               </button>

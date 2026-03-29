@@ -25,7 +25,7 @@ const Button: React.FC<ButtonProps> = ({
       onClick={onClick}
       type={type}
       className={`
-        flex items-center gap-2
+        flex items-center justify-center gap-2
         cursor-pointer
         px-4 py-2
         rounded-md

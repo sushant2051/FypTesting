@@ -256,7 +256,7 @@ const Contact = () => {
               <button
                 type="button"
                 onClick={() => setShowForm(false)}
-                className="flex items-center gap-2"
+                className="flex cursor-pointer items-center gap-2 hover:bg-gray-300 rounded p-2"
               >
                 <IoArrowBack /> Go Back
               </button>
@@ -348,7 +348,7 @@ const Contact = () => {
             <button
               type="button"
               onClick={() => setShowGroupForm(false)}
-              className="flex items-center gap-2"
+              className="flex items-center cursor-pointer gap-2 hover:bg-gray-300 rounded p-2"
             >
               <IoArrowBack /> Go Back
             </button>

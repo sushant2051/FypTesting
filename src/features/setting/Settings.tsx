@@ -17,6 +17,7 @@ import {
   slideLeft,
   slideRight,
 } from "../../components/animation/Variants";
+import { MdKey } from "react-icons/md";
 
 const Settings = () => {
   const [isPasswordChange, setIsPasswordChange] = useState<boolean>(false);
@@ -59,19 +60,22 @@ const Settings = () => {
     setIsPasswordChange(false);
   };
   return (
-    <div className="p-4">
+    <div>
       {!isPasswordChange ? (
-        <MotionWrapper variants={scaleIn}>
-          <div className="flex flex-col gap-2 py-6">
+        <MotionWrapper
+          variants={scaleIn}
+          className="p-4 border border-gray-200 rounded-md sm:m-6 m-3"
+        >
+          <div className="flex flex-col gap-2 py-6 w-full">
             <div className="flex items-center gap-2">
               <IoSettingsOutline className="h-8 w-8" />
-              <p className="text-xl">Settings</p>
+              <p className="text-lg font-bold">Settings</p>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 py-2">
               <input type="checkbox" />
               <p>Enable Notifications</p>
             </div>
-            <div className="flex flex-col gap-4 w-fit">
+            <div className="flex flex-col gap-4 sm:w-1/2 w-full">
               <Button label="Backup Data">
                 <FaDatabase />
               </Button>
@@ -85,18 +89,19 @@ const Settings = () => {
           </div>
         </MotionWrapper>
       ) : (
-        <div className="border border-gray-200 rounded-md p-4 my-8">
+        <div className="border border-gray-200 rounded-md p-4 my-8 sm:m-6 m-3">
           <MotionWrapper variants={slideRight}>
             <button
               onClick={handleGoBack}
-              className="flex items-center gap-2 cursor-pointer"
+              className="flex items-center gap-2 cursor-pointer hover:bg-gray-300 rounded p-2 w-fit"
             >
               <IoArrowBack />
               <p>Go back</p>
             </button>
           </MotionWrapper>
-          <MotionWrapper variants={blurIn}>
-            <p className="text-medium py-5">Change your password</p>
+          <MotionWrapper variants={blurIn} className="py-5 flex items-center gap-2">
+            <MdKey className="h-6 w-6"/>
+            <p className="text-medium font-bold">Change your password</p>
           </MotionWrapper>
           <MotionWrapper variants={slideLeft}>
             <form className="flex flex-col gap-4" onSubmit={handleSubmit}>

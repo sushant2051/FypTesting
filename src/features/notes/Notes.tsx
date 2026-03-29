@@ -144,9 +144,9 @@ const Notes = () => {
   );
 
   return (
-    <div className="p-6 w-full flex flex-col gap-4">
+    <div>
       {!showForm ? (
-        <>
+        <div className="border p-6 flex flex-col gap-4 border-gray-200 rounded-md sm:m-6 m-3">
           <div className="flex items-center gap-2">
             <MdOutlineNote className="h-8 w-8" />
             <h2 className="text-lg font-bold py-4">Notes</h2>
@@ -172,10 +172,10 @@ const Notes = () => {
               <span className="w-1/4 text-center">Actions</span>
             </div>
 
-            {filteredNotes.map((note) => (
+            {filteredNotes.map((note, index) => (
               <div key={note.id}>
                 <MotionWrapper variants={rotateIn}>
-                  <div className="flex px-4 py-2 items-center">
+                  <div className="flex p-4 items-center">
                     <span className="w-1/4">{note.contactName}</span>
                     <span className="w-1/2">{note.description}</span>
                     <span className="w-1/4 flex justify-center gap-2">
@@ -192,7 +192,9 @@ const Notes = () => {
                     </span>
                   </div>
                 </MotionWrapper>
-                <hr className="border-gray-300 mx-4" />
+                {index < filteredNotes.length - 1 && (
+                  <hr className="border-gray-300 mx-4" />
+                )}
               </div>
             ))}
 
@@ -200,16 +202,16 @@ const Notes = () => {
               <p className="px-4 py-3 text-gray-500">No notes found</p>
             )}
           </div>
-        </>
+        </div>
       ) : (
         <MotionWrapper variants={combo}>
           <form
             onSubmit={handleSubmit}
-            className="flex flex-col gap-4 border border-gray-200 rounded-md p-4"
+            className="flex flex-col gap-4 border border-gray-200 rounded-md p-4 sm:m-6 m-3"
           >
             <button
               type="button"
-              className="flex items-center gap-2 cursor-pointer"
+              className="flex items-center gap-2 cursor-pointer hover:bg-gray-300 rounded p-2 w-fit"
               onClick={() => setShowForm(false)}
             >
               <IoArrowBack /> Go Back
