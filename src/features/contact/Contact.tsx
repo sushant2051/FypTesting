@@ -15,6 +15,7 @@ import { MdOutlineEdit } from "react-icons/md";
 import MotionWrapper from "../../components/animation/MotionWrapper";
 import { FaCheck } from "react-icons/fa";
 import { MdOutlineCreateNewFolder } from "react-icons/md";
+import { MdContactPage } from "react-icons/md";
 import {
   blurIn,
   combo,
@@ -174,8 +175,12 @@ const Contact = () => {
   );
 
   return (
-    <div className="p-6 w-full flex flex-col gap-4">
-      <div className="flex gap-2">
+    <div className="p-6 flex flex-col gap-4 border border-gray-200 sm:m-6 m-3 rounded-md">
+      <div className="flex items-center gap-2 py-2">
+        <MdContactPage className="h-8 w-8" />
+        <p className="text-2xl font-bold">Contacts</p>
+      </div>
+      <div className="flex gap-2 py-3">
         <MotionWrapper variants={slideLeft}>
           <Button
             label="Individual"
@@ -212,24 +217,30 @@ const Contact = () => {
             </MotionWrapper>
           </div>
           <MotionWrapper variants={fadeUp}>
-            <div className="border rounded-md">
-              {filteredContacts.map((c) => (
-                <div key={c.id} className="flex px-4 py-2 justify-between">
-                  <span>{c.name}</span>
-                  <span className="flex gap-2">
-                    <Button label="Edit" onClick={() => handleEdit(c)}>
-                      <MdOutlineEdit />
-                    </Button>
-                    <Button
-                      label="Delete"
-                      variant="secondary"
-                      onClick={() => handleDelete(c.id)}
-                    >
-                      <MdDeleteOutline />
-                    </Button>
-                  </span>
-                </div>
-              ))}
+            <div className="border border-gray-400 py-4 rounded-md">
+              {filteredContacts.length > 0 ? (
+                filteredContacts.map((c) => (
+                  <div key={c.id} className="flex px-4 py-2 justify-between">
+                    <span>{c.name}</span>
+
+                    <span className="flex gap-2">
+                      <Button label="Edit" onClick={() => handleEdit(c)}>
+                        <MdOutlineEdit />
+                      </Button>
+
+                      <Button
+                        label="Delete"
+                        variant="secondary"
+                        onClick={() => handleDelete(c.id)}
+                      >
+                        <MdDeleteOutline />
+                      </Button>
+                    </span>
+                  </div>
+                ))
+              ) : (
+                <p className="p-4 text-gray-500">No contacts found</p>
+              )}
             </div>
           </MotionWrapper>
         </>
@@ -238,7 +249,7 @@ const Contact = () => {
       {activeTab === "INDIVIDUAL" && showForm && (
         <MotionWrapper variants={combo}>
           <form
-            className="border p-4 flex flex-col gap-2"
+            className="border p-4 flex flex-col gap-2 rounded-md border-gray-400 py-4"
             onSubmit={handleSubmit}
           >
             <MotionWrapper variants={scaleIn}>
@@ -277,7 +288,7 @@ const Contact = () => {
               name="relationship"
               value={formData.relationship}
               onChange={handleChange}
-              className="border p-2 rounded"
+              className="border p-2 rounded border-gray-300"
             >
               <option value="">Relationship</option>
               {relationshipOptions.map((r) => (
@@ -289,7 +300,7 @@ const Contact = () => {
               name="note"
               value={formData.note}
               onChange={handleChange}
-              className="border p-2 rounded"
+              className="border p-2 rounded border-gray-300"
             />
             <MotionWrapper variants={rotateIn}>
               <Button type="submit" label="Save Contact">
@@ -307,31 +318,32 @@ const Contact = () => {
               <MdOutlineCreateNewFolder />
             </Button>
           </MotionWrapper>
-          <MotionWrapper variants={combo}>
-            <div className="border rounded-md">
-              {groups.map((group) => (
-                <div
-                  key={group.id}
-                  onClick={() => setSelectedGroup(group)}
-                  className="p-4 cursor-pointer border-b"
-                >
-                  <p className="font-bold">{group.name}</p>
-                  <p className="text-sm text-gray-500">
-                    {group.members.map((m) => m.name).join(", ")}
-                  </p>
-                </div>
-              ))}
+          <MotionWrapper
+            variants={combo}
+            className="border rounded-md  border-gray-400"
+          >
+            {groups.map((group) => (
+              <div
+                key={group.id}
+                onClick={() => setSelectedGroup(group)}
+                className="p-4 cursor-pointer"
+              >
+                <p className="font-bold">{group.name}</p>
+                <p className="text-sm text-gray-500">
+                  {group.members.map((m) => m.name).join(", ")}
+                </p>
+              </div>
+            ))}
 
-              {groups.length === 0 && (
-                <p className="p-4 text-gray-500">No groups created</p>
-              )}
-            </div>
+            {groups.length === 0 && (
+              <p className="p-4 text-gray-500">No groups created</p>
+            )}
           </MotionWrapper>
         </>
       )}
 
       {activeTab === "GROUP" && showGroupForm && (
-        <div className="border p-4 flex flex-col gap-4">
+        <div className="border p-4 flex flex-col gap-4 rounded-md border-gray-400 py-4">
           <MotionWrapper variants={scaleIn}>
             <button
               type="button"
@@ -388,10 +400,7 @@ const Contact = () => {
 
               <div className="flex flex-col gap-2">
                 {selectedGroup.members.map((m) => (
-                  <div
-                    key={m.id}
-                    className="flex justify-between border-b pb-1"
-                  >
+                  <div key={m.id} className="flex justify-between pb-1">
                     <span>{m.name}</span>
                     <span>{m.phone}</span>
                   </div>
